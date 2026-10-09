@@ -40,3 +40,12 @@ test("the shared camera remains between module navigation and module content", a
   const renderModule = main.slice(main.indexOf("function renderModule()"));
   assert.doesNotMatch(renderModule, /captureDock\.append\(viewport\)/);
 });
+
+test("application content reserves space for fixed navigation and uses the shared type scale", async () => {
+  const css = await read("app/style.css");
+
+  assert.match(css, /--bottom-nav-clearance: calc\(104px \+ env\(safe-area-inset-bottom\)\)/);
+  assert.match(css, /scroll-padding-bottom: var\(--bottom-nav-clearance\)/);
+  assert.match(css, /padding: var\(--space-6\) var\(--page-gutter\) var\(--bottom-nav-clearance\)/);
+  assert.match(css, /font:\s*16px Inter,/);
+});

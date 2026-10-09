@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap");
 :root {
   --bg: #f8fafc;
   --card: #ffffff;
@@ -13,9 +13,17 @@
   --lavender: #eff6ff;
   --danger: #a63c32;
   --shadow: 0 16px 50px #15345b12;
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 20px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --page-gutter: clamp(16px, 3vw, 40px);
+  --bottom-nav-clearance: calc(104px + env(safe-area-inset-bottom));
   color-scheme: light;
   font:
-    16px "DM Sans",
+    16px Inter,
     "Noto Sans Bengali",
     "Hind Siliguri",
     "Nirmala UI",
@@ -185,15 +193,6 @@
   border-radius: 22px;
   display: block;
   margin-bottom: 20px;
-}
-.studio-layout.finger-full {
-  grid-template-columns: 1fr;
-}
-.finger-full .camera-panel {
-  position: static;
-}
-.finger-full #liveSummary {
-  display: none;
 }
 
 /* Module workspaces: shared visual language without changing module controls or state. */
@@ -447,16 +446,6 @@
 }
 .finger-module-intro {
   margin-bottom: 20px;
-}
-.finger-full .module-panel {
-  max-width: 1180px;
-  margin: 0 auto;
-  width: 100%;
-}
-.finger-full #fingerStudioHost {
-  max-width: 1440px;
-  margin: 0 auto;
-  width: 100%;
 }
 .finger-frame {
   background: var(--bg);
@@ -1618,7 +1607,7 @@ h1,
 h2,
 h3 {
   font-family:
-    Manrope, "Noto Sans Bengali", "Hind Siliguri", "Nirmala UI", system-ui,
+    Inter, "Noto Sans Bengali", "Hind Siliguri", "Nirmala UI", system-ui,
     sans-serif;
   letter-spacing: -0.045em;
   line-height: 1.18;
@@ -3174,5 +3163,303 @@ html[data-theme="dark"] .footer-brand-logo--dark {
   }
   html[data-theme="dark"] .landing-brand-logo--dark {
     display: none;
+  }
+}
+
+/* Active application layout quality pass: parent-level rhythm prevents card collisions. */
+body.app-active {
+  font-family: Inter, "Noto Sans Bengali", "Hind Siliguri", "Nirmala UI", system-ui, sans-serif;
+  line-height: 1.55;
+}
+body.app-active #main {
+  min-width: 0;
+  scroll-padding-bottom: var(--bottom-nav-clearance);
+}
+body.app-active .view {
+  width: min(100%, 1440px);
+  padding: var(--space-6) var(--page-gutter) var(--bottom-nav-clearance);
+}
+body.app-active .page-heading {
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+body.app-active .page-heading h1 {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+body.app-active h2 {
+  font-size: clamp(1.45rem, 2vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+body.app-active h3 {
+  font-size: 1.06rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.32;
+}
+body.app-active .eyebrow {
+  margin-bottom: var(--space-1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.35;
+}
+body.app-active .small,
+body.app-active small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+body.app-active .card {
+  border-radius: 16px;
+  padding: var(--space-5);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 7%, transparent);
+}
+body.app-active .card > :last-child {
+  margin-bottom: 0;
+}
+body.app-active .primary,
+body.app-active .secondary {
+  gap: var(--space-1);
+  min-height: 48px;
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+body.app-active .text-button {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+body.app-active .field {
+  gap: var(--space-1);
+  margin: var(--space-3) 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+body.app-active .field input,
+body.app-active .field select,
+body.app-active .field textarea,
+body.app-active #chatInput {
+  min-height: 48px;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+body.app-active .section-heading {
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+body.app-active .section-heading h2,
+body.app-active .section-heading h3 {
+  margin: 0;
+}
+body.app-active .module-panel {
+  width: 100%;
+  gap: var(--space-5);
+}
+body.app-active #moduleContent {
+  display: grid;
+  gap: var(--space-5);
+}
+body.app-active .module-workspace,
+body.app-active .finger-module-intro {
+  gap: var(--space-5);
+}
+body.app-active .finger-module-intro {
+  margin-bottom: 0;
+}
+body.app-active .module-hero {
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: 16px;
+}
+body.app-active .module-hero h2 {
+  margin: 2px 0 var(--space-1);
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+  line-height: 1.2;
+}
+body.app-active .module-hero p {
+  max-width: 68ch;
+  font-size: 0.95rem;
+  line-height: 1.58;
+}
+body.app-active .module-safety-note {
+  padding: var(--space-3);
+  font-size: 0.85rem;
+}
+body.app-active .face-overview-grid,
+body.app-active .vital-workspace,
+body.app-active .posture-workspace,
+body.app-active .sense-workspace {
+  gap: var(--space-5);
+}
+body.app-active .face-module-grid {
+  gap: var(--space-5);
+}
+body.app-active .face-diagnostics .face-module-grid {
+  padding: var(--space-4);
+}
+body.app-active .face-diagnostics,
+body.app-active .face-diagnostics > summary {
+  border-radius: 16px;
+}
+body.app-active .face-diagnostics > summary {
+  padding: var(--space-3) var(--space-4);
+}
+body.app-active .metrics {
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+body.app-active .metric {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: var(--space-3);
+}
+body.app-active .metric small {
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+body.app-active .metric strong {
+  margin-top: 4px;
+  font-family: inherit;
+  font-size: clamp(1rem, 1.8vw, 1.22rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+body.app-active .chart {
+  height: 148px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: var(--space-2) 0;
+}
+body.app-active .vital-workspace .chart,
+body.app-active .posture-workspace .chart {
+  height: 160px;
+}
+body.app-active .empty {
+  padding: var(--space-5);
+  border-radius: 16px;
+}
+body.app-active .camera-panel {
+  padding: var(--space-5);
+}
+body.app-active .camera-viewport {
+  border-radius: 14px;
+}
+body.app-active .camera-panel .section-heading {
+  margin-bottom: var(--space-4);
+}
+body.app-active .camera-panel .detail-summary {
+  margin: var(--space-3) 0;
+  gap: var(--space-2);
+}
+body.app-active .camera-panel .detail-summary > div {
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--line);
+}
+body.app-active .camera-panel .detail-summary > div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+body.app-active .camera-panel #moduleAdvice {
+  align-self: end;
+}
+body.app-active .tabs {
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: 14px;
+}
+body.app-active .tabs button {
+  min-height: 42px;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+}
+body.app-active .care-grid {
+  gap: var(--space-5);
+}
+body.app-active .event {
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: 16px;
+  margin: var(--space-2) 0;
+}
+body.app-active .bottom-nav {
+  bottom: max(14px, env(safe-area-inset-bottom));
+  padding: 6px;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--ink) 16%, transparent);
+}
+body.app-active .bottom-nav button {
+  min-height: 46px;
+  padding: 0 14px;
+  font-size: 0.8rem;
+}
+body.app-active :is(button, input, select, textarea, [tabindex]):focus-visible {
+  scroll-margin-bottom: calc(var(--bottom-nav-clearance) + var(--space-3));
+}
+body.app-active .asha-bubble {
+  bottom: calc(var(--bottom-nav-clearance) + var(--space-2));
+}
+body.app-active .chat-panel {
+  bottom: calc(var(--bottom-nav-clearance) + 84px);
+}
+
+@media (min-width: 900px) {
+  body.app-active .camera-panel {
+    grid-template-columns: minmax(0, 600px) minmax(260px, 1fr);
+    column-gap: var(--space-5);
+  }
+}
+@media (max-width: 900px) {
+  body.app-active .view {
+    padding-top: var(--space-5);
+  }
+  body.app-active .module-hero {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  body.app-active .view {
+    padding: var(--space-4) var(--page-gutter) var(--bottom-nav-clearance);
+  }
+  body.app-active .card,
+  body.app-active .module-hero {
+    padding: var(--space-4);
+    border-radius: 14px;
+  }
+  body.app-active .page-heading h1 {
+    font-size: clamp(1.75rem, 8vw, 2rem);
+  }
+  body.app-active .bottom-nav {
+    width: calc(100% - 32px);
+  }
+  body.app-active .bottom-nav button {
+    min-width: 0;
+    padding: 0 8px;
+  }
+  body.app-active .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.app-active .metrics .metric:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  body.app-active .chart,
+  body.app-active .vital-workspace .chart,
+  body.app-active .posture-workspace .chart {
+    height: 142px;
+  }
+  body.app-active .camera-panel .actions > * {
+    flex: 1 1 150px;
+  }
+}
+@media (max-width: 390px) {
+  body.app-active .bottom-nav button {
+    font-size: 0.72rem;
+  }
+  body.app-active .tabs button {
+    flex: 1 1 calc(50% - var(--space-1));
   }
 }
