@@ -2278,12 +2278,6 @@ function renderModule() {
   speechCapture = null;
   const isFinger = module === "fingerspeak";
   $("fingerStudioHost").hidden = !isFinger;
-  document
-    .querySelector(".studio-layout")
-    .classList.toggle("finger-full", isFinger);
-  if (isFinger) captureDock.append(viewport);
-  else if (view === "details")
-    cameraPanel.insertBefore(viewport, $("cameraStatus"));
   perception.setActiveModule(module);
   document.querySelectorAll("[data-module]").forEach((b) => {
     const active = b.dataset.module === module;

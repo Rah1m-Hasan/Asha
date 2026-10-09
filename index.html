@@ -767,32 +767,6 @@
           </div>
         </div>
         <div class="studio-layout">
-          <aside class="camera-panel card">
-            <div class="section-heading">
-              <h3>Shared camera</h3>
-              <span id="fpsBadge" class="pill">Paused</span>
-            </div>
-            <div class="camera-viewport">
-              <video id="camera" muted autoplay playsinline></video
-              ><canvas id="overlay"></canvas>
-              <div id="cameraPlaceholder">
-                Start support to see live tracking.
-              </div>
-            </div>
-            <p id="cameraStatus" class="small muted">
-              Face + both hands + body posture · one stream
-            </p>
-            <div class="actions">
-              <button id="studioStart" class="primary">Start camera</button
-              ><button id="calibrateButton" class="secondary">
-                Calibrate patient
-              </button>
-            </div>
-            <div id="liveSummary" class="detail-summary"></div>
-            <button id="moduleAdvice" class="text-button">
-              Ask Asha about this module →
-            </button>
-          </aside>
           <div class="module-panel">
             <nav
               id="moduleTabs"
@@ -825,8 +799,34 @@
                 <span aria-hidden="true">↔</span> Posture
               </button>
             </nav>
-            <div id="fingerStudioHost" hidden></div>
+            <aside class="camera-panel card">
+              <div class="section-heading">
+                <h3>Shared camera</h3>
+                <span id="fpsBadge" class="pill">Paused</span>
+              </div>
+              <div class="camera-viewport">
+                <video id="camera" muted autoplay playsinline></video
+                ><canvas id="overlay"></canvas>
+                <div id="cameraPlaceholder">
+                  Start support to see live tracking.
+                </div>
+              </div>
+              <p id="cameraStatus" class="small muted">
+                Face + both hands + body posture · one stream
+              </p>
+              <div class="actions">
+                <button id="studioStart" class="primary">Start camera</button
+                ><button id="calibrateButton" class="secondary">
+                  Calibrate patient
+                </button>
+              </div>
+              <div id="liveSummary" class="detail-summary"></div>
+              <button id="moduleAdvice" class="text-button">
+                Ask Asha about this module →
+              </button>
+            </aside>
             <div id="moduleContent"></div>
+            <div id="fingerStudioHost" hidden></div>
           </div>
         </div>
       </section>

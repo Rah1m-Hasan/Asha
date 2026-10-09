@@ -2197,15 +2197,12 @@ em {
   font-size: 1.2rem;
 }
 .studio-layout {
-  display: grid;
-  grid-template-columns: 370px minmax(0, 1fr);
-  gap: 22px;
+  display: block;
 }
 .camera-panel {
-  align-self: start;
-  position: sticky;
-  top: 20px;
+  position: static;
   padding: 20px;
+  margin: 0;
 }
 .camera-viewport {
   aspect-ratio: 4/3;
@@ -2241,6 +2238,51 @@ em {
 .camera-panel .secondary {
   padding: 10px 13px;
   font-size: 0.79rem;
+}
+.module-panel {
+  display: grid;
+  gap: 20px;
+}
+.module-panel > .tabs,
+.module-panel > .camera-panel,
+.module-panel > #moduleContent,
+.module-panel > #fingerStudioHost {
+  margin: 0;
+  min-width: 0;
+}
+.module-panel > .tabs {
+  margin-bottom: 0;
+}
+.module-panel > #moduleContent:empty,
+.module-panel > #fingerStudioHost[hidden] {
+  display: none;
+}
+@media (min-width: 900px) {
+  .camera-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 720px) minmax(240px, 1fr);
+    column-gap: 24px;
+    align-items: start;
+  }
+  .camera-panel > .section-heading {
+    grid-column: 1 / -1;
+  }
+  .camera-panel > .camera-viewport {
+    grid-row: 2 / span 4;
+    margin-bottom: 0;
+  }
+  .camera-panel > #cameraStatus,
+  .camera-panel > .actions,
+  .camera-panel > .detail-summary,
+  .camera-panel > #moduleAdvice {
+    grid-column: 2;
+  }
+  .camera-panel > #cameraStatus {
+    margin-top: 0;
+  }
+  .camera-panel > .detail-summary {
+    margin: 12px 0;
+  }
 }
 .tabs {
   display: flex;

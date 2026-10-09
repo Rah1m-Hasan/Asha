@@ -25,3 +25,18 @@ test("navigation and accessible controls retain their direct, keyboard-safe beha
   assert.match(senseAssist, /querySelector\('\[role="tablist"\]'\)\.addEventListener\('keydown'/);
   assert.match(senseAssist, /event\.key === 'ArrowRight'/);
 });
+
+test("the shared camera remains between module navigation and module content", async () => {
+  const [html, main] = await Promise.all([
+    read("index.html"),
+    read("app/main.js"),
+  ]);
+  const tabs = html.indexOf('id="moduleTabs"'),
+    camera = html.indexOf('class="camera-panel card"'),
+    content = html.indexOf('id="moduleContent"'),
+    fingerStudio = html.indexOf('id="fingerStudioHost"');
+
+  assert.ok(tabs >= 0 && tabs < camera && camera < content && content < fingerStudio);
+  const renderModule = main.slice(main.indexOf("function renderModule()"));
+  assert.doesNotMatch(renderModule, /captureDock\.append\(viewport\)/);
+});
