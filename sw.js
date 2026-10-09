@@ -1,14 +1,14 @@
 // Model paths are stable across releases. Prefer the network so a deployed
 // model and the current JavaScript cannot drift apart, while retaining the
 // last verified copy for offline use.
-const CACHE = "asha-live-models-v3";
+const CACHE = "asha-live-models-v4";
 const CACHE_PREFIX = "asha-live-models-";
 self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((c) => c.addAll(["./app/style.css", "./app/blue-theme.css", "./app/icon.svg"]))
+      .then((c) => c.addAll(["./app/style.css", "./app/blue-theme.css", "./assets/brand/asha-icon-192.png"]))
       .catch(() => {}),
   );
 });
@@ -56,8 +56,8 @@ self.addEventListener("push", (event) => {
     self.registration.showNotification(d.title || "Asha · new request", {
       body: d.body || "Open your caregiver dashboard.",
       tag: d.tag,
-      icon: "./icons/asha-192.png",
-      badge: "./app/icon.svg",
+      icon: "./assets/brand/asha-icon-192.png",
+      badge: "./assets/brand/asha-favicon-48.png",
       data: { url: "./?role=caregiver" },
     }),
   );

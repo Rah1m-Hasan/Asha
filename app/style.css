@@ -246,6 +246,7 @@ html { scroll-behavior: smooth; }
 .device-screen { min-height: 390px; overflow: hidden; border-radius: 22px; padding: 18px; background: #f8fafc; color: #172b4d; }
 .preview-topline { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-family: Manrope, sans-serif; }
 .preview-topline strong { font-size: 1.28rem; letter-spacing: -.06em; color: #15345b; }
+.preview-brand-logo { display: block; width: 66px; height: 22px; object-fit: contain; }
 .preview-live { color: #24745d; background: #e6f7ef; border-radius: 999px; padding: 4px 8px; font-size: .65rem; font-weight: 700; }
 .preview-welcome { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .preview-welcome img { width: 52px; height: 52px; border-radius: 16px; object-fit: cover; object-position: top; background: #dbeafe; }
@@ -1673,4 +1674,14 @@ main:focus {
   .topbar.landing-topbar .icon-button { width: 39px; height: 39px; font-size: 1.05rem; }
   .landing-page .section-heading { margin-bottom: 36px; }
   .landing-page .section-heading h2 { font-size: clamp(2rem, 9vw, 2.7rem); }
+}
+
+/* Official ASHA brand assets. The source artwork is never filtered or recolored. */
+.landing-topbar .brand { display: inline-flex; align-items: center; min-width: 0; }
+.landing-brand-logo { display: block; width: clamp(150px, 12vw, 180px); height: auto; max-height: 54px; object-fit: contain; }
+.footer-brand { display: inline-flex; align-items: center; min-height: 54px; }
+.footer-brand-logo { display: block; width: 160px; height: 54px; object-fit: contain; }
+@media (max-width: 760px) {
+  .landing-brand-logo { width: 44px; height: 40px; max-height: 40px; }
+  .footer-brand-logo { width: 150px; height: auto; }
 }

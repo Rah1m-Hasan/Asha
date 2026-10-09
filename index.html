@@ -9,18 +9,20 @@
     <meta name="theme-color" content="#2563eb" />
     <title>Asha · Here with you</title>
     <link rel="manifest" href="./app.webmanifest" />
-    <link rel="apple-touch-icon" href="./icons/asha-192.png" />
-    <link rel="icon" href="./app/icon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/brand/asha-apple-touch-180.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="./assets/brand/asha-favicon-48.png" />
     <link rel="stylesheet" href="./app/style.css" />
     <link rel="stylesheet" href="./app/blue-theme.css" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
     <header class="topbar landing-topbar">
-      <a class="brand" href="#home" data-landing-section="home" aria-label="ASHA home"
-        ><span class="brandmark" aria-hidden="true">a</span
-        ><span>asha<small>NEUROBRIDGE</small></span></a
-      >
+      <a class="brand" href="#home" data-landing-section="home" aria-label="ASHA home">
+        <picture>
+          <source media="(max-width: 520px)" srcset="./assets/brand/asha-icon-192.png" />
+          <img class="landing-brand-logo" src="./assets/brand/asha-side-540.png" alt="ASHA" width="180" height="60" />
+        </picture>
+      </a>
       <nav class="landing-nav" aria-label="Primary navigation">
         <a href="#home" data-landing-section="home">Home</a>
         <a href="#how-it-works" data-landing-section="how-it-works">How It Works</a>
@@ -60,7 +62,7 @@
             <div class="device-frame">
               <div class="device-top"><span></span></div>
               <div class="device-screen">
-                <div class="preview-topline"><strong>asha</strong><span class="preview-live">● Ready</span></div>
+                <div class="preview-topline"><img class="preview-brand-logo" src="./assets/brand/asha-side-540.png" alt="ASHA" width="66" height="22" /><span class="preview-live">● Ready</span></div>
                 <div class="preview-welcome"><img src="./assets/assets/images/asha-avatar.png" alt="" /><div><small>YOUR SPACE</small><strong>How can I help?</strong></div></div>
                 <div class="preview-request"><span class="preview-icon" aria-hidden="true">⌁</span><div><small>COMMUNICATION REQUEST</small><strong>I need water</strong><p>Review before sending to your caregiver.</p></div></div>
                 <div class="preview-confirm"><span aria-hidden="true">✓</span> Confirmation required</div>
@@ -126,7 +128,7 @@
         <section class="closing-cta" aria-labelledby="closing-title"><div><span class="eyebrow">ASHA BY NEUROBRIDGE</span><h2 id="closing-title">Communication should have no barriers.</h2><p>Explore how ASHA helps people communicate in their own way.</p></div><div class="actions"><button class="primary" data-landing-action="demo">Explore Live Demo <span aria-hidden="true">→</span></button><button class="secondary" data-landing-action="setup">Set Up With a Caregiver</button></div></section>
 
         <footer class="landing-footer">
-          <div class="footer-grid"><div><a class="brand footer-brand" href="#home" data-landing-section="home"><span class="brandmark" aria-hidden="true">a</span><span>asha<small>NEUROBRIDGE</small></span></a><p>AI-powered communication, safety and care for people who cannot speak.</p><p class="small">Helping people communicate on their own terms, with caregivers kept meaningfully connected.</p></div><div><h2>Explore</h2><a href="#home" data-landing-section="home">Home</a><a href="#features" data-landing-section="features">Features</a><a href="#how-it-works" data-landing-section="how-it-works">How It Works</a><a href="#who-its-for" data-landing-section="who-its-for">Who It’s For</a></div><div><h2>Get Started</h2><button data-landing-action="demo">Live Demo</button><button data-landing-action="setup">Create a Care Circle</button><button data-landing-action="patient">Patient Link</button><button data-landing-action="caregiver">Caregiver Access</button></div><div><h2>Information</h2><a href="#about" data-landing-section="about">About ASHA</a><a href="#about" data-landing-section="about">Privacy &amp; Trust</a><a href="#about" data-landing-section="about">Accessibility</a></div></div>
+          <div class="footer-grid"><div><a class="brand footer-brand" href="#home" data-landing-section="home"><img class="footer-brand-logo" src="./assets/brand/asha-side-540.png" alt="ASHA" width="160" height="54" /></a><p>AI-powered communication, safety and care for people who cannot speak.</p><p class="small">Helping people communicate on their own terms, with caregivers kept meaningfully connected.</p></div><div><h2>Explore</h2><a href="#home" data-landing-section="home">Home</a><a href="#features" data-landing-section="features">Features</a><a href="#how-it-works" data-landing-section="how-it-works">How It Works</a><a href="#who-its-for" data-landing-section="who-its-for">Who It’s For</a></div><div><h2>Get Started</h2><button data-landing-action="demo">Live Demo</button><button data-landing-action="setup">Create a Care Circle</button><button data-landing-action="patient">Patient Link</button><button data-landing-action="caregiver">Caregiver Access</button></div><div><h2>Information</h2><a href="#about" data-landing-section="about">About ASHA</a><a href="#about" data-landing-section="about">Privacy &amp; Trust</a><a href="#about" data-landing-section="about">Accessibility</a></div></div>
           <div class="footer-bottom"><span>© <span id="landingYear"></span> ASHA / NeuroBridge</span><span>Assistive communication demonstration — not an emergency-response system.</span><a href="#home" data-landing-section="home">Back to top ↑</a></div>
         </footer>
       </section>
