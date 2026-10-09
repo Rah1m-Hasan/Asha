@@ -22,19 +22,26 @@ const units = [
   ["AU25", "Lip opening"],
 ];
 export function faceStudio() {
-  return `<div class="face-studio">
-    <div class="card face-studio-title"><span class="eyebrow">FACESPEAK · COMPLETE FACIAL ANALYSIS</span><h2>NeuroFace Sense</h2><p>Eyes, eyebrows, cheeks, smile, lips and head movement — live from the shared camera.</p><div class="actions"><button id="nf-calibrate" class="primary">Calibrate patient</button><button id="nf-reference" class="secondary">Relearn relaxed reference</button></div><p id="nf-pipeline" class="small muted">Start the camera, then relax briefly to learn the neutral reference.</p></div>
-    <div class="face-module-grid">
-      <section class="card"><h3>♥ Facial Signal Consistency</h3><p class="small muted">Tracking proxy, not a score of motor ability.</p>${row(["Eye signal", "eyeScore"], ["Lip signal", "lipScore"], ["Smile balance", "smileScore"], ["Head signal", "headScore"])}<p id="nf-alert" class="observation-status">Start the camera to observe movement.</p></section>
-      <section class="card"><h3>👁 Eye Analysis <small>Module 2</small></h3>${row(["Status", "eyeState"], ["Last blink", "blinkDuration"], ["Blinks · last 60s", "blinkRate"])}${row(["EAR L", "earL"], ["EAR R", "earR"], ["L–R Δ", "earDiff"])}${chart("eyeChart", "EYE OPENNESS · LIVE EAR")}${cell("Signal debug", "eyeDebug")}${cell("Gaze", "gaze")}</section>
-      <section class="card"><h3>💪 Muscle Activity <small>Module 3</small></h3><div class="face-au-grid">${units.map(([key, label]) => `<div class="face-au"><label for="nf-bar-${key}">${key} · ${label}<b id="nf-value-${key}">—</b></label><progress id="nf-bar-${key}" max="100" value="0"></progress></div>`).join("")}</div><p id="nf-auStatus" class="small muted">Learning the original neutral-relative geometry reference.</p><p class="small muted">AU-inspired movement indicators, not validated clinical muscle measurements. 0% at rest is normal.</p></section>
-      <section class="card"><h3>😊 Smile Analysis <small>Module 4</small></h3>${row(["Intensity", "smileIntensity"], ["Symmetry", "symmetry"], ["Status", "smileState"])}${row(["Left activity", "smileLeft"], ["Right activity", "smileRight"])}${chart("smileChart", "SMILE INTENSITY")}<p class="small muted">Neutral-relative symmetry. Symmetric smiling is excluded from the sustained one-sided-lip flag.</p></section>
-      <section class="card"><h3>👄 Lip Control <small>Module 5</small></h3>${row(["Gesture", "lipGesture"], ["MAR", "mar"], ["Pucker", "pucker"])}${chart("lipChart", "LIP OPENING")}${cell("Lip deviation", "deviation")}${cell("Sustained one-sided hold", "lipHold")}<progress id="nf-lipProgress" max="60" value="0" aria-label="Sustained one-sided lip hold, seconds"></progress><p id="nf-lipFlag" class="small muted">60 seconds of persistent same-side displacement is required.</p>${row(["Brow / corner pattern", "affectBrow"], ["Squeeze / tension pattern", "affectTension"])}<p class="small muted">Expression patterns are not proof of sadness or pain. A lip flag is not a seizure diagnosis.</p></section>
-      <section class="card"><h3>〰 Facial Motion <small>Module 6</small></h3>${row(["Displacement", "displacement"], ["Acceleration", "acceleration"], ["Rhythm", "rhythm"])}${chart("motionChart", "LANDMARK DISPLACEMENT")}${cell("Movement state", "motionState")}<p class="small muted">Large or repeated motion can also be intentional. This does not distinguish involuntary movement from voluntary movement.</p></section>
-      <section class="card"><h3>↔ Head Movement <small>Module 7</small></h3>${row(["Yaw", "yaw"], ["Pitch", "pitch"], ["Roll", "roll"])}${cell("Observed pose", "headPose")}${cell("Nod detected", "nod")}${chart("yawChart", "LEFT / RIGHT HEAD TURN")}${chart("pitchChart", "UP / DOWN HEAD MOVEMENT")}<p id="nf-headState" class="small muted">Complete a turn and return to center to count it.</p></section>
-      <section class="card"><h3>🗣 FaceSpeak Communication</h3><div id="nf-rules"></div><p id="faceCalibrationStatus" class="small muted"></p><p class="small muted">Calibrated head, smile and deliberate blink responses are available. Three quick practiced blinks ask Asha for help. Wait for her question, then make one separate deliberate blink to confirm. Normal blink counts alone never send a request.</p><button id="nf-calibrateRules" class="secondary">Guided gesture calibration →</button></section>
-      <section class="card face-log"><div class="section-heading"><h3>📋 Activity Log</h3><div class="actions"><button id="nf-clearLog" class="text-button">Clear</button><button id="nf-exportLog" class="text-button">Export JSON</button></div></div><div id="nf-log" class="face-event-log"><p class="muted">No observations yet.</p></div></section>
+  return `<div class="face-studio module-workspace">
+    <header class="module-hero face-studio-title">
+      <div><span class="eyebrow">FACESPEAK · NEUROFACE SENSE</span><h2>NeuroFace Sense</h2><p>Communicate through calibrated facial movements. Use the shared camera to observe a face, prepare a comfortable response, and review every proposed request before it is sent.</p></div>
+      <div class="module-hero-actions"><button id="nf-calibrate" class="primary">Start calibration</button><button id="nf-reference" class="secondary">Relearn relaxed reference</button></div>
+      <p id="nf-pipeline" class="module-live-status" role="status">Start the camera, then relax briefly to learn the neutral reference.</p>
+    </header>
+    <div class="face-overview-grid">
+      <section class="card face-readiness-card"><div class="section-heading"><div><span class="eyebrow">LIVE RECOGNITION</span><h3>Facial signal status</h3></div><span class="status-badge" aria-hidden="true">Live</span></div><p class="small muted">Observed signals support calibration; they are not a score of motor ability.</p>${row(["Eye signal", "eyeScore"], ["Lip signal", "lipScore"], ["Smile balance", "smileScore"], ["Head signal", "headScore"])}<p id="nf-alert" class="observation-status" role="status">Start the camera to observe movement.</p></section>
+      <section class="card face-calibration-card"><span class="eyebrow">PERSONAL SETUP</span><h3>Calibrate a comfortable response</h3><ol class="calibration-steps"><li><b>1</b><span>Start the shared camera and settle into a relaxed position.</span></li><li><b>2</b><span>Choose a head, smile, or deliberate blink response that feels comfortable.</span></li><li><b>3</b><span>Practice a separate confirmation before a request can be sent.</span></li></ol><p id="faceCalibrationStatus" class="small muted"></p><button id="nf-calibrateRules" class="secondary">Open guided gesture calibration</button></section>
     </div>
+    <section class="card facespeak-reference"><div class="section-heading"><div><span class="eyebrow">GESTURE REFERENCE</span><h3>Available communication responses</h3></div><span class="small muted">Personal calibration required</span></div><div id="nf-rules" class="gesture-reference-list"></div><p class="small muted">Three quick practiced blinks ask Asha for help. A separate deliberate blink confirms only after Asha asks. Normal blink counts alone never send a request.</p></section>
+    <details class="face-diagnostics" open><summary><span><span class="eyebrow">DETAILS</span> Live facial observations</span><span class="small muted">Eye, expression, lip, motion and head movement</span></summary><div class="face-module-grid">
+      <section class="card"><h3>Eye Analysis</h3>${row(["Status", "eyeState"], ["Last blink", "blinkDuration"], ["Blinks · last 60s", "blinkRate"])}${row(["EAR L", "earL"], ["EAR R", "earR"], ["L–R Δ", "earDiff"])}${chart("eyeChart", "EYE OPENNESS · LIVE EAR")}${cell("Signal debug", "eyeDebug")}${cell("Gaze", "gaze")}</section>
+      <section class="card"><h3>Muscle Activity</h3><div class="face-au-grid">${units.map(([key, label]) => `<div class="face-au"><label for="nf-bar-${key}">${key} · ${label}<b id="nf-value-${key}">—</b></label><progress id="nf-bar-${key}" max="100" value="0"></progress></div>`).join("")}</div><p id="nf-auStatus" class="small muted">Learning the original neutral-relative geometry reference.</p><p class="small muted">AU-inspired movement indicators are not clinical muscle measurements.</p></section>
+      <section class="card"><h3>Smile Analysis</h3>${row(["Intensity", "smileIntensity"], ["Symmetry", "symmetry"], ["Status", "smileState"])}${row(["Left activity", "smileLeft"], ["Right activity", "smileRight"])}${chart("smileChart", "SMILE INTENSITY")}<p class="small muted">Neutral-relative symmetry; symmetric smiling is excluded from the sustained one-sided-lip flag.</p></section>
+      <section class="card"><h3>Lip Control</h3>${row(["Gesture", "lipGesture"], ["MAR", "mar"], ["Pucker", "pucker"])}${chart("lipChart", "LIP OPENING")}${cell("Lip deviation", "deviation")}${cell("Sustained one-sided hold", "lipHold")}<progress id="nf-lipProgress" max="60" value="0" aria-label="Sustained one-sided lip hold, seconds"></progress><p id="nf-lipFlag" class="small muted">60 seconds of persistent same-side displacement is required.</p>${row(["Brow / corner pattern", "affectBrow"], ["Squeeze / tension pattern", "affectTension"])}<p class="small muted">Expression patterns are not proof of sadness or pain.</p></section>
+      <section class="card"><h3>Facial Motion</h3>${row(["Displacement", "displacement"], ["Acceleration", "acceleration"], ["Rhythm", "rhythm"])}${chart("motionChart", "LANDMARK DISPLACEMENT")}${cell("Movement state", "motionState")}<p class="small muted">This does not distinguish involuntary from voluntary movement.</p></section>
+      <section class="card"><h3>Head Movement</h3>${row(["Yaw", "yaw"], ["Pitch", "pitch"], ["Roll", "roll"])}${cell("Observed pose", "headPose")}${cell("Nod detected", "nod")}${chart("yawChart", "LEFT / RIGHT HEAD TURN")}${chart("pitchChart", "UP / DOWN HEAD MOVEMENT")}<p id="nf-headState" class="small muted">Complete a turn and return to center to count it.</p></section>
+    </div></details>
+    <section class="card face-log"><div class="section-heading"><div><span class="eyebrow">SESSION RECORD</span><h3>Activity Log</h3></div><div class="actions"><button id="nf-clearLog" class="text-button">Clear</button><button id="nf-exportLog" class="text-button">Export JSON</button></div></div><div id="nf-log" class="face-event-log"><p class="muted">No observations yet.</p></div></section>
   </div>`;
 }
 const text = (id, value) => {
@@ -170,12 +177,20 @@ export function paintFaceStudio(s, trained, progress) {
     ["Prompted nod", "Water or yes", "NOD_COMPLETED"],
     ["Prompted left turn + return", "Food", "LEFT_TURN_COMPLETED"],
     ["Prompted right turn + return", "Toilet", "RIGHT_TURN_COMPLETED"],
-    ["3 quick deliberate blinks", "Ask Asha · then confirm", "RAPID_BLINK_REQUEST"],
-    ["Separate deliberate blink", "Confirm after Asha's question", "BLINK_CONFIRM"],
+    [
+      "3 quick deliberate blinks",
+      "Ask Asha · then confirm",
+      "RAPID_BLINK_REQUEST",
+    ],
+    [
+      "Separate deliberate blink",
+      "Confirm after Asha's question",
+      "BLINK_CONFIRM",
+    ],
   ]
     .map(
       ([label, phrase, event]) =>
-        `<div class="rule"><span>${label}<small>${event ? trained?.enabled?.includes(event) ? "Calibrated" : "Calibration needed" : "Always safe"}</small></span><strong>${phrase}</strong></div>`,
+        `<div class="rule"><span>${label}<small>${event ? (trained?.enabled?.includes(event) ? "Calibrated" : "Calibration needed") : "Always safe"}</small></span><strong>${phrase}</strong></div>`,
     )
     .join("");
   if ($("nf-rules").dataset.content !== rules) {

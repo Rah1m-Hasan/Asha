@@ -2,7 +2,11 @@ import { Perception } from "./perception.js";
 import { GuidedCalibration } from "./calibration.js";
 import { faceStudio, paintFaceStudio } from "./face-studio.js";
 import { RequestGate, recommendations, clamp } from "./signals.js";
-import { CompanionGuide, responsePlan, confirmationMatches } from "./companion-guide.js";
+import {
+  CompanionGuide,
+  responsePlan,
+  confirmationMatches,
+} from "./companion-guide.js";
 import { BlinkIntent, RAPID_BLINK, CONFIRM_BLINK } from "./blink-intent.js";
 import { SpeechCapture } from "./speech-capture.js";
 import { instantGreeting } from "./fast-reply.js";
@@ -47,11 +51,16 @@ const names = {
   posture: "Body posture",
 };
 const moduleGuidance = {
-  facespeak: "FaceSpeak shows your live eyes, eyebrows, smile, lips and head movement. A caregiver can calibrate a head, smile or deliberate blink response here. A practiced triple blink asks for help; a separate deliberate blink confirms after my question.",
-  fingerspeak: "FingerSpeak can preview one or two hands. To speak personalized phrases, record and test your own gestures in the FingerSpeak studio.",
-  vitalsense: "VitalSense shows an experimental camera pulse trend. It is not a medical vital reading and never sends an emergency request.",
-  senseassist: "SenseAssist can help clarify speech that was hard to understand. Review what was heard before Asha suggests a possible meaning.",
-  posture: "Body posture shows camera-based position and movement. A sustained change can lead to a gentle question, not an automatic diagnosis or caregiver request.",
+  facespeak:
+    "FaceSpeak shows your live eyes, eyebrows, smile, lips and head movement. A caregiver can calibrate a head, smile or deliberate blink response here. A practiced triple blink asks for help; a separate deliberate blink confirms after my question.",
+  fingerspeak:
+    "FingerSpeak can preview one or two hands. To speak personalized phrases, record and test your own gestures in the FingerSpeak studio.",
+  vitalsense:
+    "VitalSense shows an experimental camera pulse trend. It is not a medical vital reading and never sends an emergency request.",
+  senseassist:
+    "SenseAssist can help clarify speech that was hard to understand. Review what was heard before Asha suggests a possible meaning.",
+  posture:
+    "Body posture shows camera-based position and movement. A sustained change can lead to a gentle question, not an automatic diagnosis or caregiver request.",
 };
 const needs = {
   water: "I need water",
@@ -86,17 +95,30 @@ let fingerNeuralLive = false,
   personalProfileId = null,
   demoSession = read("demoPatientId", "") === patient?.patientId && !!patient;
 const demoAssessment = {
-  leftHand: "reliable", rightHand: "reliable", wrist: "reliable",
-  fingers: "reliable", eyes: "reliable", lips: "reliable",
-  head: "reliable", speech: "limited", canSee: true, canHear: true,
+  leftHand: "reliable",
+  rightHand: "reliable",
+  wrist: "reliable",
+  fingers: "reliable",
+  eyes: "reliable",
+  lips: "reliable",
+  head: "reliable",
+  speech: "limited",
+  canSee: true,
+  canHear: true,
 };
 const demoProfile = {
-  patientId: "local-demo", label: "Demo patient", assessment: demoAssessment,
+  patientId: "local-demo",
+  label: "Demo patient",
+  assessment: demoAssessment,
   supportContext: { categories: [], goals: [], note: "" },
-  recommendation: { primary: "facespeak", suggested: ["facespeak", "fingerspeak", "senseassist"] },
+  recommendation: {
+    primary: "facespeak",
+    suggested: ["facespeak", "fingerspeak", "senseassist"],
+  },
   voice: { name: "", rate: 0.9 },
 };
-const personalId = () => patient?.patientId || profile?.patientId || "local-demo";
+const personalId = () =>
+  patient?.patientId || profile?.patientId || "local-demo";
 function ensureFingerStudio() {
   if ($("fingerStudio")) return;
   const frame = document.createElement("iframe");
@@ -211,14 +233,17 @@ function theme() {
     "aria-label",
     dark ? "Switch to light theme" : "Switch to dark theme",
   );
-  $("themeButton").title = dark ? "Switch to light theme" : "Switch to dark theme";
+  $("themeButton").title = dark
+    ? "Switch to light theme"
+    : "Switch to dark theme";
   save("settings", settings);
   $("fingerStudio")?.contentWindow?.ashaSetTheme?.(settings.theme);
 }
 theme();
 function show(id) {
   if (!$(id)) return;
-  if (view === "details" && id !== "details") speechCapture?.stop("page-change");
+  if (view === "details" && id !== "details")
+    speechCapture?.stop("page-change");
   if (view === "settings" && id !== "settings") stopVoiceRecording();
   if (["patient", "details"].includes(id) && !profile) {
     startDemo(id === "details" ? module : null);
@@ -254,12 +279,20 @@ function show(id) {
     cancelRequest();
     closeChat();
   }
-  if (profile && settings.proactive && previousView !== id && ["patient", "details", "settings"].includes(id)) {
-    const description = id === "patient"
-      ? "This is your patient page. I will explain your choices aloud after support starts. You can repeat my last message at any time."
-      : id === "details"
-        ? "These are your live details. " + (moduleGuidance[module] || "You can explore every module here. The camera stays shared across them.")
-        : "This is Settings. A caregiver can choose my voice or pause my check-ins here.";
+  if (
+    profile &&
+    settings.proactive &&
+    previousView !== id &&
+    ["patient", "details", "settings"].includes(id)
+  ) {
+    const description =
+      id === "patient"
+        ? "This is your patient page. I will explain your choices aloud after support starts. You can repeat my last message at any time."
+        : id === "details"
+          ? "These are your live details. " +
+            (moduleGuidance[module] ||
+              "You can explore every module here. The camera stays shared across them.")
+          : "This is Settings. A caregiver can choose my voice or pause my check-ins here.";
     say(description);
     guide.lastPrompt = performance.now();
   }
@@ -291,7 +324,9 @@ const landingActions = {
   caregiver: () => show("caregiver"),
 };
 document.querySelectorAll("[data-landing-action]").forEach((button) => {
-  button.addEventListener("click", () => landingActions[button.dataset.landingAction]?.());
+  button.addEventListener("click", () =>
+    landingActions[button.dataset.landingAction]?.(),
+  );
 });
 const menuToggle = $("landingMenuToggle");
 menuToggle?.addEventListener("click", () => show("settings"));
@@ -300,7 +335,9 @@ document.querySelectorAll("[data-landing-section]").forEach((link) => {
     event.preventDefault();
     const section = $(link.dataset.landingSection);
     show("welcome");
-    requestAnimationFrame(() => section?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    requestAnimationFrame(() =>
+      section?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
   });
 });
 $("landingYear").textContent = new Date().getFullYear();
@@ -468,7 +505,9 @@ async function openPatient() {
       patient = null;
       profile = null;
       $("linkDialog").close();
-      await startDemo(new URL(location.href).searchParams.get("module") || "facespeak");
+      await startDemo(
+        new URL(location.href).searchParams.get("module") || "facespeak",
+      );
     } else {
       toast(e.message);
       openLink("patient");
@@ -597,7 +636,11 @@ async function startDemo(requestedModule = "facespeak") {
     $("modeBadge").textContent = names[module];
     show(requestedModule ? "details" : "patient");
   })();
-  try { await startingDemo; } finally { startingDemo = null; }
+  try {
+    await startingDemo;
+  } finally {
+    startingDemo = null;
+  }
 }
 const fields = {
   leftHand: "Left hand",
@@ -827,7 +870,10 @@ function stopAshaOutput() {
   speechOutputActive = false;
   speechCapture?.resumeAfterOutput();
 }
-function say(text, { recording, force = false, language, onDone, onError } = {}) {
+function say(
+  text,
+  { recording, force = false, language, onDone, onError } = {},
+) {
   const version = ++speechVersion;
   $("ashaMessage").textContent = text;
   $("detailAshaMessage").textContent = "Asha: " + text;
@@ -864,8 +910,13 @@ function say(text, { recording, force = false, language, onDone, onError } = {})
     const spokenLanguage = replyLanguage(text, language),
       voices = speechSynthesis.getVoices();
     u.lang = spokenLanguage === "bn" ? "bn-BD" : "en-US";
-    u.voice = voices.find((x) => x.name === chosen && x.lang.toLowerCase().startsWith(spokenLanguage)) ||
-      voices.find((x) => x.lang.toLowerCase().startsWith(spokenLanguage)) || null;
+    u.voice =
+      voices.find(
+        (x) =>
+          x.name === chosen && x.lang.toLowerCase().startsWith(spokenLanguage),
+      ) ||
+      voices.find((x) => x.lang.toLowerCase().startsWith(spokenLanguage)) ||
+      null;
     u.rate = settings.rate || profile?.voice?.rate || 0.9;
     u.pitch = profile?.voice?.pitch || 1;
     u.onend = () => finishAshaOutput(version, onDone);
@@ -876,18 +927,27 @@ function say(text, { recording, force = false, language, onDone, onError } = {})
   }
 }
 function voiceBusy() {
-  return speechOutputActive || ("speechSynthesis" in window && speechSynthesis.speaking);
+  return (
+    speechOutputActive ||
+    ("speechSynthesis" in window && speechSynthesis.speaking)
+  );
 }
 $("previewVoice").onclick = () => {
   const old = settings.voice;
   settings.voice = $("setupVoice").value;
-  say("I'm Asha. I'll guide the patient aloud, describe each page, and give time to respond. We can calibrate deliberate blink communication when head or smile movement isn't available. I'll ask for confirmation before sending a request.", {
-    force: true,
-  });
+  say(
+    "I'm Asha. I'll guide the patient aloud, describe each page, and give time to respond. We can calibrate deliberate blink communication when head or smile movement isn't available. I'll ask for confirmation before sending a request.",
+    {
+      force: true,
+    },
+  );
   settings.voice = old;
 };
 $("setupVoice").onchange = () => $("previewVoice").click();
-$("repeatMessage").onclick = () => gate.pending ? speakConfirmation(gate.pending) : say($("ashaMessage").textContent);
+$("repeatMessage").onclick = () =>
+  gate.pending
+    ? speakConfirmation(gate.pending)
+    : say($("ashaMessage").textContent);
 function renderPatient() {
   if (!profile) return;
   $("patientGreeting").textContent =
@@ -899,24 +959,34 @@ function renderPatient() {
   $("modeBadge").textContent = names[module];
   $("gestureHint").textContent = confirmationHint();
   $("connectionBadge").textContent = demoSession
-    ? patient ? "Demo care circle ready" : "Local demo"
+    ? patient
+      ? "Demo care circle ready"
+      : "Local demo"
     : "Care circle connected";
   $("demoNotice").hidden = !demoSession;
   $("demoNotice").textContent = patient
     ? "Demo session. Explore every module; camera models run locally. Copy the caregiver link if you want to test delivery on another device."
     : "Local demo. Live sensing and calibration work here; AI chat and caregiver delivery need a connection.";
   for (const b of document.querySelectorAll("[data-demo-care-link]"))
-    b.hidden = !demoSession || !patient || !carePatients.some((x) => x.patientId === patient.patientId && x.token);
+    b.hidden =
+      !demoSession ||
+      !patient ||
+      !carePatients.some((x) => x.patientId === patient.patientId && x.token);
   updateQuietAsha();
   if (patient && read("unsent_" + patient.patientId, null)) renderRetry();
   else $("retryRequest")?.remove();
 }
-document.querySelectorAll("[data-demo-care-link]").forEach((b) => b.onclick = () => {
-  const c = carePatients.find((x) => x.patientId === patient?.patientId);
-  if (c?.token) copy(privateLink("caregiver", c.patientId, c.token));
-});
+document.querySelectorAll("[data-demo-care-link]").forEach(
+  (b) =>
+    (b.onclick = () => {
+      const c = carePatients.find((x) => x.patientId === patient?.patientId);
+      if (c?.token) copy(privateLink("caregiver", c.patientId, c.token));
+    }),
+);
 function updateQuietAsha() {
-  $("quietAsha").textContent = settings.proactive ? "Pause Asha check-ins" : "Resume Asha check-ins";
+  $("quietAsha").textContent = settings.proactive
+    ? "Pause Asha check-ins"
+    : "Resume Asha check-ins";
   $("quietAsha").setAttribute("aria-pressed", String(!settings.proactive));
 }
 $("quietAsha").onclick = () => {
@@ -926,40 +996,61 @@ $("quietAsha").onclick = () => {
   updateQuietAsha();
   if (settings.proactive) {
     if (perception.running) guideCheckIn("routine");
-    else say("I'm ready to guide you again. Start support when you are comfortable.");
+    else
+      say(
+        "I'm ready to guide you again. Start support when you are comfortable.",
+      );
   } else {
     stopAshaOutput();
-    $("ashaMessage").textContent = "Asha's check-ins are paused. Requests and caregiver messages still work.";
-    $("detailAshaMessage").textContent = "Asha: " + $("ashaMessage").textContent;
+    $("ashaMessage").textContent =
+      "Asha's check-ins are paused. Requests and caregiver messages still work.";
+    $("detailAshaMessage").textContent =
+      "Asha: " + $("ashaMessage").textContent;
   }
 };
 function confirmationHint() {
   const plan = responsePlan(profile?.assessment, trained?.enabled);
-  if (gate.pending?.source === "deliberate blink" || plan.mode === "blink") return "Wait until I finish speaking, keep your eyes open briefly, then make one deliberate blink: close a little longer than your quick blinks and reopen, as practiced. Do nothing to cancel.";
-  if (plan.mode === "menu") return "Nod and return to center once more to confirm.";
-  if (plan.mode === "yes") return "Please " + plan.verb + " once more to confirm.";
+  if (gate.pending?.source === "deliberate blink" || plan.mode === "blink")
+    return "Wait until I finish speaking, keep your eyes open briefly, then make one deliberate blink: close a little longer than your quick blinks and reopen, as practiced. Do nothing to cancel.";
+  if (plan.mode === "menu")
+    return "Nod and return to center once more to confirm.";
+  if (plan.mode === "yes")
+    return "Please " + plan.verb + " once more to confirm.";
   if (Object.values(handMaps).some((x) => x?.trained))
     return "Repeat your personalized hand gesture to confirm.";
   return "A caregiver can calibrate a comfortable head, smile or deliberate blink response in Details. Touch confirmation is also available.";
 }
 function guideCheckIn(reason = "routine") {
   guide.due(performance.now());
-  if (!profile || !settings.proactive || !perception.running || document.hidden ||
-      calibration || gate.pending || (guide.pending && reason !== "start") ||
-      !["patient", "details"].includes(view)) return;
+  if (
+    !profile ||
+    !settings.proactive ||
+    !perception.running ||
+    document.hidden ||
+    calibration ||
+    gate.pending ||
+    (guide.pending && reason !== "start") ||
+    !["patient", "details"].includes(view)
+  )
+    return;
   if (settings.scan) {
     if (reason === "start") {
       guide.lastPrompt = performance.now();
-      say("I'm Asha. Hands-free need scanning is on. I'll read each choice aloud. Use your calibrated response to choose one, then confirm it separately.");
+      say(
+        "I'm Asha. Hands-free need scanning is on. I'll read each choice aloud. Use your calibrated response to choose one, then confirm it separately.",
+      );
     }
     return;
   }
-  const message = guide.ask({
-    assessment: profile.assessment,
-    enabled: trained?.enabled || [],
-    handMapped: Object.values(handMaps).some((x) => x?.trained),
-    reason,
-  }, performance.now());
+  const message = guide.ask(
+    {
+      assessment: profile.assessment,
+      enabled: trained?.enabled || [],
+      handMapped: Object.values(handMaps).some((x) => x?.trained),
+      reason,
+    },
+    performance.now(),
+  );
   say(message);
 }
 let screenLock;
@@ -995,7 +1086,10 @@ async function startMonitor() {
   }
   // Speak inside the caregiver's Start tap, before permission/model awaits.
   // Mobile browsers may block audio first started after an async operation.
-  if (settings.proactive) say("I'm Asha. I'm starting your support. I will guide you when the camera is ready.");
+  if (settings.proactive)
+    say(
+      "I'm Asha. I'm starting your support. I will guide you when the camera is ready.",
+    );
   $("startMonitoring").disabled = $("studioStart").disabled = true;
   try {
     await perception.start();
@@ -1046,18 +1140,31 @@ function propose(kind, source = "touch", text = needs[kind]) {
   wakeTimer = setTimeout(() => cancelRequest(), 30000);
 }
 function speakConfirmation(p) {
-  const useBlink = p.source === "deliberate blink" || responsePlan(profile?.assessment, trained?.enabled).mode === "blink";
+  const useBlink =
+    p.source === "deliberate blink" ||
+    responsePlan(profile?.assessment, trained?.enabled).mode === "blink";
   if (useBlink) blinkIntent.waitForQuestion();
-  $("confirmStatus").textContent = useBlink ? "Wait for Asha's question to finish." : "Waiting for your separate confirmation.";
-  const question = p.kind === "water" ? "Do you want water? Shall I ask your caregiver? " : p.text + ". Shall I ask your caregiver? ";
-  say(question + confirmationHint(), { onDone: () => {
-    if (gate.pending === p && useBlink) {
-      blinkIntent.questionFinished(performance.now());
-      $("confirmStatus").textContent = "Ready: keep eyes open briefly, then make your practiced yes blink.";
-    }
-  }, onError: () => {
-    if (gate.pending === p) $("confirmStatus").textContent = "Question audio was interrupted. Repeat the question before confirming by blink, or ask a caregiver for help.";
-  } });
+  $("confirmStatus").textContent = useBlink
+    ? "Wait for Asha's question to finish."
+    : "Waiting for your separate confirmation.";
+  const question =
+    p.kind === "water"
+      ? "Do you want water? Shall I ask your caregiver? "
+      : p.text + ". Shall I ask your caregiver? ";
+  say(question + confirmationHint(), {
+    onDone: () => {
+      if (gate.pending === p && useBlink) {
+        blinkIntent.questionFinished(performance.now());
+        $("confirmStatus").textContent =
+          "Ready: keep eyes open briefly, then make your practiced yes blink.";
+      }
+    },
+    onError: () => {
+      if (gate.pending === p)
+        $("confirmStatus").textContent =
+          "Question audio was interrupted. Repeat the question before confirming by blink, or ask a caregiver for help.";
+    },
+  });
 }
 function cancelRequest() {
   gate.cancel();
@@ -1069,7 +1176,9 @@ document
   .querySelectorAll("[data-need]")
   .forEach((b) => (b.onclick = () => propose(b.dataset.need)));
 $("confirmNo").onclick = cancelRequest;
-$("confirmRepeat").onclick = () => { if (gate.pending) speakConfirmation(gate.pending); };
+$("confirmRepeat").onclick = () => {
+  if (gate.pending) speakConfirmation(gate.pending);
+};
 $("confirmDialog").addEventListener("cancel", cancelRequest);
 async function confirmRequest() {
   const p = gate.confirm(performance.now());
@@ -1082,8 +1191,11 @@ async function confirmRequest() {
 $("confirmYes").onclick = confirmRequest;
 async function sendEvent(kind, source, text, confirmed) {
   if (!patient) {
-    $("latestRequest").textContent = `${text} · recognized in this local demo. Caregiver delivery needs a connection.`;
-    say("I recognized your request on this device. A caregiver connection is needed to deliver it.");
+    $("latestRequest").textContent =
+      `${text} · recognized in this local demo. Caregiver delivery needs a connection.`;
+    say(
+      "I recognized your request on this device. A caregiver connection is needed to deliver it.",
+    );
     return;
   }
   const event = {
@@ -1140,7 +1252,8 @@ function renderRetry() {
 }
 $("testRequest").onclick = () => sendEvent("test", "touch", needs.test, true);
 function confirmationEvent(e) {
-  if (gate.pending?.source === "deliberate blink") return e.type === CONFIRM_BLINK;
+  if (gate.pending?.source === "deliberate blink")
+    return e.type === CONFIRM_BLINK;
   return confirmationMatches(e.type, profile?.assessment, trained?.enabled);
 }
 perception.addEventListener("gesture", ({ detail: e }) => {
@@ -1163,8 +1276,13 @@ perception.addEventListener("gesture", ({ detail: e }) => {
   // In particular, three ordinary blinks can never propose or confirm one.
   const now = performance.now();
   guide.due(now);
-  if (e.type === "SMILE_COMPLETED" && settings.proactive && !guide.pending &&
-      now - lastProactive > 120000 && !voiceBusy()) {
+  if (
+    e.type === "SMILE_COMPLETED" &&
+    settings.proactive &&
+    !guide.pending &&
+    now - lastProactive > 120000 &&
+    !voiceBusy()
+  ) {
     lastProactive = now;
     guideCheckIn("smile");
   }
@@ -1210,8 +1328,14 @@ perception.addEventListener("hand", ({ detail: h }) => {
     return;
   }
   if (!["patient", "details"].includes(view) || fingerNeuralLive) return;
-  if (h.pose === "Open palm" && settings.proactive && !guide.pending &&
-      !gate.pending && guide.due(performance.now()) && !voiceBusy()) {
+  if (
+    h.pose === "Open palm" &&
+    settings.proactive &&
+    !guide.pending &&
+    !gate.pending &&
+    guide.due(performance.now()) &&
+    !voiceBusy()
+  ) {
     guideCheckIn("routine");
   }
   if (gate.pending && handMaps[h.pose]?.trained) {
@@ -1244,15 +1368,31 @@ perception.addEventListener("cue", async ({ detail: cue }) => {
   guideCheckIn(cue === "possible_wake" ? "wake" : "change");
 });
 perception.addEventListener("frame", ({ detail: s }) => {
-  const blinkEnabled = profile?.assessment?.eyes && profile.assessment.eyes !== "none" &&
-    trained?.enabled?.includes(RAPID_BLINK) && trained.enabled.includes(CONFIRM_BLINK);
-  if (!calibration && blinkEnabled && !document.hidden && ["patient", "details"].includes(view)) {
+  const blinkEnabled =
+    profile?.assessment?.eyes &&
+    profile.assessment.eyes !== "none" &&
+    trained?.enabled?.includes(RAPID_BLINK) &&
+    trained.enabled.includes(CONFIRM_BLINK);
+  if (
+    !calibration &&
+    blinkEnabled &&
+    !document.hidden &&
+    ["patient", "details"].includes(view)
+  ) {
     const signal = blinkIntent.update(s.analysis?.eye, s.t, s.analysis?.valid);
     if (signal === RAPID_BLINK && !gate.pending) {
-      const selected = guide.accept(RAPID_BLINK, performance.now()) || (settings.scan && scanKind) || "water";
+      const selected =
+        guide.accept(RAPID_BLINK, performance.now()) ||
+        (settings.scan && scanKind) ||
+        "water";
       propose(selected, "deliberate blink");
       if (!gate.pending) blinkIntent.reset();
-    } else if (signal === CONFIRM_BLINK && gate.pending && confirmationEvent({ type: signal })) confirmRequest();
+    } else if (
+      signal === CONFIRM_BLINK &&
+      gate.pending &&
+      confirmationEvent({ type: signal })
+    )
+      confirmRequest();
   } else blinkIntent.reset();
   if (calibration) {
     const old = calibration.index,
@@ -1387,7 +1527,9 @@ async function pollPatient() {
           ". You can still choose any interface.",
       );
     }
-    $("connectionBadge").textContent = demoSession ? "Demo care circle ready" : "Connected";
+    $("connectionBadge").textContent = demoSession
+      ? "Demo care circle ready"
+      : "Connected";
     if (d.events[0]) {
       const e = d.events[0],
         state = e.receipt?.acknowledgedAt
@@ -1413,7 +1555,9 @@ async function pollPatient() {
       }
     }
     $("connectionBadge").textContent =
-      e.status === 401 ? "Session expired · reopen your private link" : "Connection interrupted";
+      e.status === 401
+        ? "Session expired · reopen your private link"
+        : "Connection interrupted";
   } finally {
     pollBusy = false;
   }
@@ -1525,10 +1669,17 @@ setInterval(() => {
   if (patient && ["patient", "details"].includes(view)) heartbeat();
 }, 15000);
 setInterval(() => {
-  if (settings.proactive && !settings.scan && perception.running &&
-      !document.hidden && !voiceBusy() &&
-      ["patient", "details"].includes(view) &&
-      !calibration && !gate.pending && guide.due(performance.now()))
+  if (
+    settings.proactive &&
+    !settings.scan &&
+    perception.running &&
+    !document.hidden &&
+    !voiceBusy() &&
+    ["patient", "details"].includes(view) &&
+    !calibration &&
+    !gate.pending &&
+    guide.due(performance.now())
+  )
     guideCheckIn("routine");
 }, 10000);
 document.addEventListener("visibilitychange", () => {
@@ -1559,7 +1710,9 @@ function addChat(text, user = false) {
   return p;
 }
 function ashaDetails(result) {
-  const sources = Array.isArray(result.sources) ? result.sources.slice(0, 6) : [],
+  const sources = Array.isArray(result.sources)
+      ? result.sources.slice(0, 6)
+      : [],
     orchestration = result.orchestration;
   if (!sources.length && !orchestration) return null;
   const details = document.createElement("details"),
@@ -1574,17 +1727,27 @@ function ashaDetails(result) {
   };
   if (orchestration) {
     if (orchestration.task) line("Task: " + orchestration.task);
-    if (typeof orchestration.model === "string") line("Model: " + orchestration.model);
-    for (const step of (Array.isArray(orchestration.steps) ? orchestration.steps : []).slice(0, 10))
-      if (step && typeof step.tool === "string") line(step.tool + " · " + String(step.status || "completed"));
-    line(orchestration.verified === true
-      ? "Format and action checks passed. Any caregiver request still needs your separate confirmation."
-      : "No verified action is available from this response.");
+    if (typeof orchestration.model === "string")
+      line("Model: " + orchestration.model);
+    for (const step of (Array.isArray(orchestration.steps)
+      ? orchestration.steps
+      : []
+    ).slice(0, 10))
+      if (step && typeof step.tool === "string")
+        line(step.tool + " · " + String(step.status || "completed"));
+    line(
+      orchestration.verified === true
+        ? "Format and action checks passed. Any caregiver request still needs your separate confirmation."
+        : "No verified action is available from this response.",
+    );
   }
   for (const source of sources) {
     if (!source || typeof source !== "object") continue;
     const title = document.createElement("strong");
-    title.textContent = String(source.title || "Supporting information").slice(0, 180);
+    title.textContent = String(source.title || "Supporting information").slice(
+      0,
+      180,
+    );
     details.append(title);
     if (source.text) line(source.text);
     if (source.source) line("Source: " + source.source);
@@ -1598,17 +1761,27 @@ function presentAshaActions(result, message, context) {
   if (details) message.after(details);
   const proposal = result.orchestration?.verified === true && result.proposal,
     allowed = ["water", "food", "toilet", "comfort", "help", "message"],
-    canPropose = () => ["patient", "details"].includes(view) &&
-      personalId() === context.patientId && !gate.pending && !calibration;
+    canPropose = () =>
+      ["patient", "details"].includes(view) &&
+      personalId() === context.patientId &&
+      !gate.pending &&
+      !calibration;
   let opened = false;
-  if (proposal && allowed.includes(proposal.kind) && typeof proposal.text === "string" && proposal.text.trim()) {
+  if (
+    proposal &&
+    allowed.includes(proposal.kind) &&
+    typeof proposal.text === "string" &&
+    proposal.text.trim()
+  ) {
     const review = document.createElement("button");
     review.type = "button";
     review.className = "secondary";
     review.textContent = "Review caregiver request";
     const openProposal = () => {
       if (!canPropose()) {
-        toast("Return to this patient’s page and finish the current confirmation or calibration first.");
+        toast(
+          "Return to this patient’s page and finish the current confirmation or calibration first.",
+        );
         return false;
       }
       propose(proposal.kind, "asha", proposal.text.trim().slice(0, 250));
@@ -1618,15 +1791,25 @@ function presentAshaActions(result, message, context) {
     container.append(review);
     if (view === context.view && canPropose()) opened = openProposal();
   }
-  if (result.orchestration?.verified === true &&
-      ["facespeak", "fingerspeak", "senseassist", "vitalsense", "posture"].includes(result.suggestedModule)) {
+  if (
+    result.orchestration?.verified === true &&
+    [
+      "facespeak",
+      "fingerspeak",
+      "senseassist",
+      "vitalsense",
+      "posture",
+    ].includes(result.suggestedModule)
+  ) {
     const open = document.createElement("button");
     open.type = "button";
     open.className = "secondary";
     open.textContent = "Open " + names[result.suggestedModule];
     open.onclick = () => {
       if (gate.pending || calibration) {
-        toast("Finish the current confirmation or calibration before opening another module.");
+        toast(
+          "Finish the current confirmation or calibration before opening another module.",
+        );
         return;
       }
       module = result.suggestedModule;
@@ -1664,8 +1847,15 @@ function immediateAppGuide(text) {
   });
   if (greeting) return greeting;
   // Generated replies handle the selected language; local shortcuts are English.
-  if (["bn", "mixed"].includes(settings.language) || /[\u0980-\u09ff]/u.test(text)) return null;
-  const q = text.toLowerCase().replace(/[?!.,]/g, "").trim();
+  if (
+    ["bn", "mixed"].includes(settings.language) ||
+    /[\u0980-\u09ff]/u.test(text)
+  )
+    return null;
+  const q = text
+    .toLowerCase()
+    .replace(/[?!.,]/g, "")
+    .trim();
   if (
     [
       "what is this app",
@@ -1676,8 +1866,13 @@ function immediateAppGuide(text) {
   )
     return "I'm Asha. I guide this app and help you communicate with face, hand, or speech responses that work for you. A caregiver request is sent only after you confirm it.";
   if (
-    ["what is this page", "what can i do here", "how do i use this page"].includes(q) ||
-    q === `guide me through ${names[module].toLowerCase()} based on my assessment`
+    [
+      "what is this page",
+      "what can i do here",
+      "how do i use this page",
+    ].includes(q) ||
+    q ===
+      `guide me through ${names[module].toLowerCase()} based on my assessment`
   ) {
     if (view === "caregiver")
       return "This is the caregiver dashboard. You can see patient requests, check the latest status, and acknowledge a request so the patient knows you saw it.";
@@ -1695,7 +1890,9 @@ function immediateAppGuide(text) {
 }
 async function askAsha(text, options = {}) {
   if (!credential())
-    throw Error("The local demo cannot reach Asha cloud right now. Live camera modules still work; retry when connected.");
+    throw Error(
+      "The local demo cannot reach Asha cloud right now. Live camera modules still work; retry when connected.",
+    );
   if (!settings.cloud) {
     if (
       !confirm(
@@ -1707,22 +1904,42 @@ async function askAsha(text, options = {}) {
     save("settings", settings);
   }
   const savedMemories = read("speech_" + personalId(), []),
-    confirmedMemories = options.mode === "interpret" && Array.isArray(savedMemories)
-      ? savedMemories
-          // The older schema also wrote pairs only after "Yes, speak this".
-          .map((x) => x && typeof x.confirmed === "string"
-            ? { heard: x.heard, confirmedText: x.confirmed, confirmed: true }
-            : x)
-          .filter((x) => x && x.confirmed === true && typeof x.heard === "string" && typeof x.confirmedText === "string" &&
-            x.heard.trim().length > 0 && x.heard.length <= 180 &&
-            x.confirmedText.trim().length > 0 && x.confirmedText.length <= 180)
-          .slice(-20)
-          .map((x) => ({ heard: x.heard, confirmedText: x.confirmedText, confirmed: true }))
-      : [];
+    confirmedMemories =
+      options.mode === "interpret" && Array.isArray(savedMemories)
+        ? savedMemories
+            // The older schema also wrote pairs only after "Yes, speak this".
+            .map((x) =>
+              x && typeof x.confirmed === "string"
+                ? {
+                    heard: x.heard,
+                    confirmedText: x.confirmed,
+                    confirmed: true,
+                  }
+                : x,
+            )
+            .filter(
+              (x) =>
+                x &&
+                x.confirmed === true &&
+                typeof x.heard === "string" &&
+                typeof x.confirmedText === "string" &&
+                x.heard.trim().length > 0 &&
+                x.heard.length <= 180 &&
+                x.confirmedText.trim().length > 0 &&
+                x.confirmedText.length <= 180,
+            )
+            .slice(-20)
+            .map((x) => ({
+              heard: x.heard,
+              confirmedText: x.confirmedText,
+              confirmed: true,
+            }))
+        : [];
   const request = {
     text,
     module: view === "caregiver" ? "caregiver" : module,
-    context: options.context ||
+    context:
+      options.context ||
       `Camera ${perception.running ? "on" : "off"}; posture ${perception.snapshot.posture?.label || "unavailable"}`,
     mode: options.mode || "chat",
     history: conversation.slice(-6),
@@ -1731,11 +1948,13 @@ async function askAsha(text, options = {}) {
     confirmedMemories,
   };
   const chatCredential = credential();
-  let reply, responseCredential = chatCredential;
+  let reply,
+    responseCredential = chatCredential;
   try {
     reply = await call("asha", { cred: chatCredential, body: request });
   } catch (error) {
-    if (error.status !== 401 || !demoSession || view === "caregiver") throw error;
+    if (error.status !== 401 || !demoSession || view === "caregiver")
+      throw error;
     if (!(await renewDemoSession(chatCredential))) throw error;
     responseCredential = patient;
     reply = await call("asha", { cred: responseCredential, body: request });
@@ -1776,7 +1995,11 @@ $("chatForm").onsubmit = async (e) => {
   }, 1500);
   try {
     const d = await askAsha(text);
-    if (context.demo && demoSession && ashaResponseSessions.get(d) === personalId())
+    if (
+      context.demo &&
+      demoSession &&
+      ashaResponseSessions.get(d) === personalId()
+    )
       context.patientId = personalId();
     p.textContent = d.reply;
     if (!presentAshaActions(d, p, context) && !gate.pending && !calibration)
@@ -1851,9 +2074,15 @@ for (const [id, k] of [
   ["autoScan", "scan"],
 ])
   $(id).onchange = () => {
-    if (k === "scan" && $(id).checked && responsePlan(profile?.assessment, trained?.enabled).mode === "none") {
+    if (
+      k === "scan" &&
+      $(id).checked &&
+      responsePlan(profile?.assessment, trained?.enabled).mode === "none"
+    ) {
       $(id).checked = false;
-      toast("Calibrate a head, smile or deliberate blink response before enabling hands-free scanning.");
+      toast(
+        "Calibrate a head, smile or deliberate blink response before enabling hands-free scanning.",
+      );
       return;
     }
     settings[k] = $(id).checked;
@@ -1873,18 +2102,24 @@ $("ashaLanguage").onchange = () => {
 $("voiceSelect").onchange = () => {
   settings.voice = $("voiceSelect").value;
   save("settings", settings);
-  say("I'm Asha. I'll explain each page and check in gently while support is on. You can pause my check-ins any time.", { force: true });
+  say(
+    "I'm Asha. I'll explain each page and check in gently while support is on. You can pause my check-ins any time.",
+    { force: true },
+  );
 };
 $("voiceRate").oninput = () => {
   settings.rate = Number($("voiceRate").value);
   save("settings", settings);
 };
 $("testVoice").onclick = () =>
-  say(settings.language === "bn" || settings.language === "mixed"
-    ? "আমি আপনার পাশে আছি। আপনার কী প্রয়োজন?"
-    : "I’m here with you. What would make you more comfortable?", {
-    force: true,
-  });
+  say(
+    settings.language === "bn" || settings.language === "mixed"
+      ? "আমি আপনার পাশে আছি। আপনার কী প্রয়োজন?"
+      : "I’m here with you. What would make you more comfortable?",
+    {
+      force: true,
+    },
+  );
 $("editAssessment").onclick = () => {
   if (!careData) {
     show("caregiver");
@@ -2050,29 +2285,29 @@ function renderModule() {
   else if (view === "details")
     cameraPanel.insertBefore(viewport, $("cameraStatus"));
   perception.setActiveModule(module);
-  document
-    .querySelectorAll("[data-module]")
-    .forEach((b) => b.classList.toggle("active", b.dataset.module === module));
+  document.querySelectorAll("[data-module]").forEach((b) => {
+    const active = b.dataset.module === module;
+    b.classList.toggle("active", active);
+    if (b.matches("[role=tab]"))
+      b.setAttribute("aria-selected", String(active));
+  });
   let html = "";
   if (module === "facespeak") html = faceStudio();
   if (module === "fingerspeak") {
-    html = `<div class="card"><span class="eyebrow">BOTH HANDS, YOUR CHOICE</span><h2>FingerSpeak</h2><p class="muted">Both hands are tracked independently. Anyone can explore this interface, regardless of assessment. Familiar poses are detected automatically; a personal mapping needs three distinct holds.</p><div id="handReadings"><div class="empty">Bring one or both hands into view.</div></div><label class="field">Gesture<select id="handPose"><option>Open palm</option><option>Index extended</option><option>Two fingers extended</option><option>Three fingers extended</option><option>Closed fingers</option></select></label><label class="field">Meaning<select id="handMeaning"><option value="help">Caregiver</option><option value="water">Water</option><option value="toilet">Toilet</option><option value="food">Food</option><option value="comfort">Comfort</option></select></label><button id="trainHand" class="primary">Learn this gesture</button><p id="handTrainStatus" class="small muted">Hold for a moment, relax, and repeat three times. Then repeat a mapped gesture to confirm a proposed request.</p><div id="savedHands"></div></div>`;
+    html = `<section class="module-hero"><div><span class="eyebrow">FINGERSPEAK</span><h2>Train your gestures. Communicate your way.</h2><p>Build a personal gesture vocabulary in the studio below. A trained gesture proposes a message; the patient still confirms before a caregiver request is sent.</p></div><span class="module-safety-note">Camera processing stays in this browser</span></section><section class="card quick-mapping-card"><div class="section-heading"><div><span class="eyebrow">QUICK MAPPING</span><h3>Familiar pose preview</h3></div><span class="small muted">Optional</span></div><p class="muted">Both hands are tracked independently. These familiar poses are a quick preview; use the full studio for personal training, testing, temporal modelling and evaluation.</p><div id="handReadings"><div class="empty">Bring one or both hands into view.</div></div><div class="module-form-grid"><label class="field">Gesture<select id="handPose"><option>Open palm</option><option>Index extended</option><option>Two fingers extended</option><option>Three fingers extended</option><option>Closed fingers</option></select></label><label class="field">Meaning<select id="handMeaning"><option value="help">Caregiver</option><option value="water">Water</option><option value="toilet">Toilet</option><option value="food">Food</option><option value="comfort">Comfort</option></select></label></div><div class="actions"><button id="trainHand" class="primary">Learn this gesture</button></div><p id="handTrainStatus" class="small muted" role="status">Hold for a moment, relax, and repeat three times. Then repeat a mapped gesture to confirm a proposed request.</p><div id="savedHands" class="saved-mappings"></div></section>`;
   }
   if (module === "vitalsense") {
-    html = `<div class="card"><span class="eyebrow">LOCAL CAMERA SIGNAL</span><h2>VitalSense</h2><p class="muted">Sit comfortably in steady light. A small forehead region supplies a color signal; motion and weak signals are rejected.</p><div class="metrics">${metric("Camera pulse estimate", "pulseValue")}${metric("Signal quality", "pulseQuality")}${metric("Window", "pulseWindow", "20 sec")}</div>${chart("pulseChart", "COLOR PULSE SIGNAL")}<p id="pulseReason" class="muted">Start the camera and allow 20 seconds.</p><p class="small muted">Experimental pulse trend, not a medical vital measurement. This camera cannot measure blood pressure, oxygen saturation or temperature. No emergency action uses this estimate.</p></div>`;
+        html = `<section class="module-hero vital-hero"><div><span class="eyebrow">VITALSENSE</span><h2>VitalSense</h2><p>Camera-based pulse-trend observation. Use steady light and a comfortable, still position while the shared camera collects a local colour signal.</p></div><aside class="module-safety-note"><strong>Not a medical device.</strong> This experimental observation cannot measure blood pressure, oxygen saturation, or temperature.</aside></section><section class="vital-workspace"><div class="card vital-reading-card"><div class="section-heading"><div><span class="eyebrow">OBSERVATION</span><h3>Pulse trend</h3></div><span class="status-badge">Local camera signal</span></div><div class="metrics">${metric("Camera pulse estimate", "pulseValue")}${metric("Signal quality", "pulseQuality")}${metric("Collection window", "pulseWindow", "20 sec")}</div>${chart("pulseChart", "COLOR PULSE SIGNAL")}<p id="pulseReason" class="observation-status" role="status">Start the camera and allow 20 seconds.</p></div><aside class="card capture-guidance"><span class="eyebrow">CAPTURE GUIDANCE</span><h3>Improve the signal</h3><ul><li>Keep your forehead visible to the shared camera.</li><li>Use steady, even lighting.</li><li>Stay comfortably still while data is collected.</li></ul><p class="small muted">Weak light or movement can leave the trend unavailable. No emergency action uses this estimate.</p></aside></section>`;
   }
   if (module === "posture") {
-    html = `<div class="card"><span class="eyebrow">SHARED ACROSS EVERY INTERFACE</span><h2>Body posture</h2><p class="muted">Position the camera so shoulders and, if possible, hips are visible. Lightweight body tracking stays active in every module. A sustained change can prompt a gentle check-in.</p><div class="metrics">${metric("Observed position", "poseLabel")}${metric("Shoulder tilt", "poseTilt")}${metric("Body movement", "poseMotion")}</div>${chart("poseChart", "POSTURE TREND")}<button id="enableYolo" class="secondary">${perception.yoloEnabled ? "Pause" : "Enable"} YOLO cross-check</button><p id="yoloStatus" class="small muted">YOLO26 pose runs in its own worker. It is an optional, heavier second model; lightweight pose remains active.</p><p class="small muted">Rest-to-awake check-in requires one minute of valid closed-eye, still-body observations followed by eyes opening and body movement. It does not identify sleep stages or diagnose falls or pain.</p></div>`;
+        html = `<section class="module-hero"><div><span class="eyebrow">POSTURE</span><h2>Body posture</h2><p>Observe sustained posture changes and gentle check-in signals. Keep shoulders and, if possible, hips visible to the shared camera.</p></div><span class="module-safety-note">Observation only · no fall, pain, or sleep diagnosis</span></section><section class="posture-workspace"><div class="card posture-reading-card"><div class="section-heading"><div><span class="eyebrow">CURRENT OBSERVATION</span><h3>Posture status</h3></div><span class="status-badge">Shared camera</span></div><div class="metrics">${metric("Observed position", "poseLabel")}${metric("Shoulder tilt", "poseTilt")}${metric("Body movement", "poseMotion")}</div>${chart("poseChart", "POSTURE TREND")}<p class="small muted">A sustained change can prompt a gentle check-in. This screen does not create historical records or clinical conclusions.</p></div><aside class="card posture-settings"><span class="eyebrow">OPTIONAL CROSS-CHECK</span><h3>Additional pose model</h3><p class="muted">The lightweight pose model remains active. The optional second model uses more device resources.</p><button id="enableYolo" class="secondary">${perception.yoloEnabled ? "Pause" : "Enable"} YOLO cross-check</button><p id="yoloStatus" class="small muted" role="status">YOLO26 pose runs in its own worker. It is an optional, heavier second model; lightweight pose remains active.</p><p class="small muted">Rest-to-awake check-in requires one minute of valid closed-eye, still-body observations followed by eyes opening and body movement. It does not identify sleep stages or diagnose falls or pain.</p></aside></section>`;
   }
   if (module === "senseassist") {
-    html = `<div class="card"><span class="eyebrow">YOUR WORDS, MORE CLEARLY</span><h2>SenseAssist</h2><p class="muted">Practice a phrase or clarify something you want to say. Review the heard words, then Asha suggests the closest intended meaning.</p><label class="field">Practice phrase / context (optional)<input id="speechTarget" maxlength="150" placeholder="e.g. red rabbit green"></label><label class="field">Listening language<select id="speechLanguage"><option value="en-US">English</option><option value="bn-BD">বাংলা · Bangla</option></select></label><p class="small muted">Choose the language you are speaking. For mixed speech, choose the main language and edit any missed words before asking Asha.</p><div class="actions"><button id="listenSpeech" class="primary">Start listening</button><button id="stopSpeech" class="secondary" disabled>Stop</button><button id="hearTarget" class="secondary">Hear phrase</button></div><p id="speechStatus" class="small muted">Microphone speech recognition depends on your browser and may use its online service. Only the reviewed words are sent to Asha.</p><label class="field">What was heard · editable<textarea id="heardSpeech" maxlength="600" placeholder="For example: wed wabbit wghreen"></textarea></label><button id="interpretSpeech" class="primary">Make my meaning clearer →</button><div id="speechResult"></div><button id="practiceAdvice" class="text-button">Ask Asha for a practice cue →</button></div>`;
+        html = `<section class="module-hero"><div><span class="eyebrow">SENSEASSIST</span><h2>SenseAssist</h2><p>Turn spoken words into clearer communication. Listen, review the editable transcript, then ask Asha for a suggested wording.</p></div><span class="module-safety-note">Review before confirming or sending</span></section><section class="sense-workspace"><div class="card listening-card"><div class="section-heading"><div><span class="eyebrow">LISTENING</span><h3>Capture your words</h3></div><span class="status-badge">Up to 90 seconds</span></div><div class="module-form-grid"><label class="field">Practice phrase / context <span class="field-optional">(optional)</span><input id="speechTarget" maxlength="150" placeholder="e.g. red rabbit green"></label><label class="field">Listening language<select id="speechLanguage"><option value="en-US">English</option><option value="bn-BD">বাংলা · Bangla</option></select></label></div><p class="small muted">Choose the main language you are speaking. For mixed speech, edit any missed words before asking Asha.</p><div class="listening-actions"><button id="listenSpeech" class="primary">Start listening</button><button id="stopSpeech" class="secondary" disabled>Stop listening</button><button id="hearTarget" class="secondary">Hear practice phrase</button></div><p id="speechStatus" class="observation-status" role="status">Microphone speech recognition depends on your browser and may use its online service. Only reviewed words are sent to Asha.</p></div><div class="card transcript-card"><span class="eyebrow">REVIEW</span><h3>What was heard</h3><label class="field">Editable transcript<textarea id="heardSpeech" maxlength="600" placeholder="For example: wed wabbit wghreen"></textarea></label><div class="clarify-actions"><button id="interpretSpeech" class="primary">Suggest clearer wording</button><button id="practiceAdvice" class="text-button">Ask Asha for a practice cue →</button></div><div id="speechResult" class="speech-suggestion" aria-live="polite"></div></div></section>`;
   }
   if (isFinger) {
     ensureFingerStudio();
-    html =
-      '<details class="card"><summary>Quick familiar-pose mappings (optional)</summary>' +
-      html +
-      "</details>";
+    html = '<div class="finger-module-intro">' + html + "</div>";
   }
   $("moduleContent").innerHTML = html;
   if ($("nf-calibrate")) {
@@ -2167,6 +2402,20 @@ document.querySelectorAll("[data-module]").forEach(
       heartbeat();
     }),
 );
+$('moduleTabs').addEventListener('keydown', (event) => {
+  if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+  const tabs = [...event.currentTarget.querySelectorAll('button[data-module]')];
+  const current = tabs.indexOf(document.activeElement);
+  if (current < 0) return;
+  event.preventDefault();
+  const next = event.key === 'Home'
+    ? 0
+    : event.key === 'End'
+      ? tabs.length - 1
+      : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+  tabs[next].focus();
+  tabs[next].click();
+});
 function paint(s) {
   if (!s.raw || !perception.running) return;
   $("fpsBadge").textContent = s.latency + " ms";
@@ -2302,13 +2551,16 @@ function drawChart(id, key, color) {
 }
 function wireSpeech() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  $("speechLanguage").value = settings.speechLanguage === "bn-BD" ? "bn-BD" : "en-US";
-  $("speechStatus").textContent = "Press Start for up to 90 seconds of listening. The mic pauses while Asha speaks; other nearby voices may still be heard. Review words before sending them to AI.";
+  $("speechLanguage").value =
+    settings.speechLanguage === "bn-BD" ? "bn-BD" : "en-US";
+  $("speechStatus").textContent =
+    "Press Start for up to 90 seconds of listening. The mic pauses while Asha speaks; other nearby voices may still be heard. Review words before sending them to AI.";
   $("speechLanguage").onchange = () => {
     speechCapture?.stop("language-change");
     settings.speechLanguage = $("speechLanguage").value;
     save("settings", settings);
-    $("speechStatus").textContent = "Listening language updated. Start listening when you are ready.";
+    $("speechStatus").textContent =
+      "Listening language updated. Start listening when you are ready.";
   };
   if (!SR) {
     $("listenSpeech").disabled = true;
@@ -2323,22 +2575,24 @@ function wireSpeech() {
       Recognition: SR,
       durationMs: 90000,
       onText: (text) => {
-        if (speechCapture === capture && $("heardSpeech")) $("heardSpeech").value = text;
+        if (speechCapture === capture && $("heardSpeech"))
+          $("heardSpeech").value = text;
       },
       onState: ({ state, reason }) => {
         if (speechCapture !== capture || !$("speechStatus")) return;
         const active = state === "listening" || state === "paused";
         $("listenSpeech").disabled = active;
         $("stopSpeech").disabled = !active;
-        $("speechStatus").textContent = state === "listening"
-          ? "Listening for up to 90 seconds. Browser silence cutoffs reconnect automatically. Stop when finished."
-          : state === "paused"
-            ? "Listening paused while Asha speaks; it resumes shortly after her voice ends."
-            : state === "complete"
-              ? "90-second listening session complete. Review or edit the words, or start again."
-              : state === "error"
-                ? `Speech capture stopped (${reason || "browser error"}). Review the words or start again.`
-                : "Listening stopped. Review or edit the words below.";
+        $("speechStatus").textContent =
+          state === "listening"
+            ? "Listening for up to 90 seconds. Browser silence cutoffs reconnect automatically. Stop when finished."
+            : state === "paused"
+              ? "Listening paused while Asha speaks; it resumes shortly after her voice ends."
+              : state === "complete"
+                ? "90-second listening session complete. Review or edit the words, or start again."
+                : state === "error"
+                  ? `Speech capture stopped (${reason || "browser error"}). Review the words or start again.`
+                  : "Listening stopped. Review or edit the words below.";
       },
     });
     speechCapture = capture;
@@ -2374,7 +2628,13 @@ function wireSpeech() {
       // Preserve a recovered demo reply without applying it to another patient.
       if (ashaResponseSessions.get(d) !== personalId()) return;
       if (resultNode !== $("speechResult")) {
-        if (!resultWasDemo || !demoSession || resultPatientId === personalId() || !$("speechResult")) return;
+        if (
+          !resultWasDemo ||
+          !demoSession ||
+          resultPatientId === personalId() ||
+          !$("speechResult")
+        )
+          return;
         resultNode = $("speechResult");
         $("heardSpeech").value = heard;
       }
@@ -2388,7 +2648,11 @@ function wireSpeech() {
         say(speechCandidate, { force: true, language: d.language });
         const stored = read("speech_" + personalId(), []),
           memory = Array.isArray(stored) ? stored : [];
-        memory.push({ heard: speechHeard, confirmedText: speechCandidate, confirmed: true });
+        memory.push({
+          heard: speechHeard,
+          confirmedText: speechCandidate,
+          confirmed: true,
+        });
         save("speech_" + personalId(), memory.slice(-30));
         toast("Confirmed wording saved on this device.");
       };
@@ -2434,7 +2698,16 @@ async function initialize() {
       show("caregiver");
     else if (patient) await openPatient();
     const requestedModule = u.searchParams.get("module");
-    if (!profile && ["facespeak", "fingerspeak", "vitalsense", "senseassist", "posture"].includes(requestedModule))
+    if (
+      !profile &&
+      [
+        "facespeak",
+        "fingerspeak",
+        "vitalsense",
+        "senseassist",
+        "posture",
+      ].includes(requestedModule)
+    )
       await startDemo(requestedModule);
     if (
       profile &&
@@ -2457,13 +2730,14 @@ async function initialize() {
   fetch(new URL("health", api))
     .then((r) => r.json())
     .then((d) => {
-      $("cloudBadge").textContent = demoSession && !patient
-        ? "Local demo"
-        : d.cloudConfigured
-          ? "Asha cloud configured"
-          : d.caregiverConfigured
-            ? "Care circle online · AI unavailable"
-            : "Local support";
+      $("cloudBadge").textContent =
+        demoSession && !patient
+          ? "Local demo"
+          : d.cloudConfigured
+            ? "Asha cloud configured"
+            : d.caregiverConfigured
+              ? "Care circle online · AI unavailable"
+              : "Local support";
     })
     .catch(() => ($("cloudBadge").textContent = "Local support"));
 }
