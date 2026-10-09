@@ -74,7 +74,7 @@ Local preview: http://127.0.0.1:4180. The development server proxies API request
 
 `api/` contains Vercel serverless functions; `server/` contains persistence and validation. `app/` is the unified frontend and camera pipeline. The original static export remains in Git history and supporting assets are reused. FingerSpeak is embedded from `neuroface/fingerspeak.html`, receiving hand results and the parent's existing media stream through a same-origin bridge; it cannot request another camera or microphone. Other legacy frontend routes are redirected/excluded on Vercel.
 
-Server secrets: `MAIRA_API_KEY`, `MAIRA_PROJECT_KEY`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `CRON_SECRET`. Never set the Supabase secret or other private keys in frontend code or a public repository. `scripts/provision.mjs` is an operator helper for this workstation; it transfers credentials in memory.
+Server secrets: `MAIRA_API_KEY`, `MAIRA_PROJECT_KEY`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `CRON_SECRET`. Never set the Supabase secret or other private keys in frontend code or a public repository. `scripts/provision.mjs` is an operator helper for this workstation; it transfers credentials in memory. Operator scripts that need a local Maira credential file (`scripts/secret-scan.mjs` for exact-value scanning and `scripts/provider-check.mjs`) read only the path supplied in `MAIRA_CONFIG_PATH`; no credential path is stored in this repository.
 
 ### Supabase cutover
 

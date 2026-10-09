@@ -28,7 +28,7 @@ const $ = (id) => document.getElementById(id),
 const site = new URL("../", import.meta.url),
   api =
     location.hostname === "mysunatislam.github.io"
-      ? "https://neurobridge-asha-live.vercel.app/api/"
+      ? "https://asha-rahim-app-ora-3-jon.vercel.app/api/"
       : new URL("api/", site).href;
 const read = (k, f) => {
     try {
@@ -212,6 +212,7 @@ theme();
 function show(id) {
   if (!$(id)) return;
   if (view === "details" && id !== "details") speechCapture?.stop("page-change");
+  if (view === "settings" && id !== "settings") stopVoiceRecording();
   if (["patient", "details"].includes(id) && !profile) {
     startDemo(id === "details" ? module : null);
     return;
@@ -317,6 +318,8 @@ function parseLink(value, expected) {
   const approvedSites = [
     site,
     new URL("https://neurobridge-asha-live.vercel.app/"),
+    new URL("https://asha-rahim-app-ora-3-jon.vercel.app/"),
+    new URL("https://asha-unified-app.vercel.app/"),
     new URL("https://mysunatislam.github.io/neurobridge-asha-unified-app/"),
   ];
   if (
@@ -1513,6 +1516,7 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", () => {
   speechCapture?.stop("page-hidden");
+  stopVoiceRecording();
   perception.stop();
 });
 function addChat(text, user = false) {
@@ -1851,17 +1855,35 @@ $("forgetDevice").onclick = () => {
     if (k.startsWith("asha_live_")) localStorage.removeItem(k);
   location.href = site.href;
 };
-let voiceRecorder, voiceStream;
+let voiceRecorder, voiceStream, voiceStopTimer;
+function stopVoiceRecording() {
+  if (voiceStopTimer) clearTimeout(voiceStopTimer);
+  voiceStopTimer = null;
+  if (voiceRecorder?.state === "recording") {
+    voiceRecorder.stop();
+    return;
+  }
+  voiceStream?.getTracks().forEach((track) => track.stop());
+  voiceStream = null;
+  voiceRecorder = null;
+}
 $("recordVoice").onclick = async () => {
+  let stream;
   try {
-    voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    voiceRecorder = new MediaRecorder(voiceStream);
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    voiceStream = stream;
+    voiceRecorder = recorder;
     const chunks = [];
-    voiceRecorder.ondataavailable = (e) => chunks.push(e.data);
+    recorder.ondataavailable = (e) => chunks.push(e.data);
     const key = $("recordPhrase").value;
-    voiceRecorder.onstop = () => {
-      voiceStream.getTracks().forEach((t) => t.stop());
-      const blob = new Blob(chunks, { type: voiceRecorder.mimeType });
+    recorder.onstop = () => {
+      if (voiceStopTimer) clearTimeout(voiceStopTimer);
+      voiceStopTimer = null;
+      stream.getTracks().forEach((track) => track.stop());
+      if (voiceRecorder === recorder) voiceRecorder = null;
+      if (voiceStream === stream) voiceStream = null;
+      const blob = new Blob(chunks, { type: recorder.mimeType });
       const reader = new FileReader();
       reader.onload = () => {
         try {
@@ -1876,19 +1898,24 @@ $("recordVoice").onclick = async () => {
       $("stopVoice").hidden = true;
       $("recordVoice").disabled = false;
     };
-    voiceRecorder.start();
+    recorder.start();
     $("stopVoice").hidden = false;
     $("recordVoice").disabled = true;
     $("voiceRecordStatus").textContent = "Recording… read the selected phrase.";
-    setTimeout(() => {
-      if (voiceRecorder.state === "recording") voiceRecorder.stop();
+    voiceStopTimer = setTimeout(() => {
+      if (voiceRecorder === recorder && recorder.state === "recording")
+        recorder.stop();
     }, 12000);
   } catch (e) {
+    stream?.getTracks().forEach((track) => track.stop());
+    if (voiceStream === stream) {
+      voiceStream = null;
+      voiceRecorder = null;
+    }
     toast("Microphone unavailable: " + e.message);
   }
 };
-$("stopVoice").onclick = () =>
-  voiceRecorder?.state === "recording" && voiceRecorder.stop();
+$("stopVoice").onclick = stopVoiceRecording;
 $("playVoice").onclick = () => {
   const audio = read("voice_" + $("recordPhrase").value, null);
   if (audio) new Audio(audio).play().catch(() => toast("Tap Play again."));
@@ -2180,13 +2207,13 @@ function paint(s) {
           )
           .join("")
       : '<div class="empty">Bring one or both hands into view.</div>';
-  drawChart("eyeChart", "ear", "#448e85");
+  drawChart("eyeChart", "ear", "#2563eb");
   drawChart("smileChart", "smile", "#9a7fba");
   drawChart("lipChart", "lip", "#b27077");
-  drawChart("yawChart", "yaw", "#448e85");
+  drawChart("yawChart", "yaw", "#2563eb");
   drawChart("pitchChart", "pitch", "#9a7fba");
   drawChart("motionChart", "motion", "#cc9b56");
-  drawChart("pulseChart", "pulse", "#448e85");
+  drawChart("pulseChart", "pulse", "#2563eb");
   drawChart("poseChart", "pose", "#9a7fba");
 }
 function drawChart(id, key, color) {

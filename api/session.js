@@ -19,11 +19,14 @@ import {
   voice,
   clean,
   eventValue,
+  hasPatientConfirmation,
   safeStatus,
   pushEndpoint,
 } from "../server/logic.js";
 export default async function handler(req, res) {
   if (!begin(req, res)) return;
+  if (!["GET", "POST"].includes(req.method))
+    return res.status(405).json({ error: "Method not allowed" });
   try {
     const b = req.method === "POST" ? body(req) : {};
     if (b.action === "create") {
@@ -103,10 +106,7 @@ export default async function handler(req, res) {
       const prior = await store.read(file);
       if (prior) return res.json({ event: prior, duplicate: true });
       const ev = eventValue(b);
-      if (
-        !ev.confirmed &&
-        !["test", "posture", "face_change"].includes(ev.kind)
-      )
+      if (!hasPatientConfirmation(ev))
         return res
           .status(400)
           .json({ error: "Please confirm this request first." });

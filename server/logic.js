@@ -12,6 +12,12 @@ export const clean = (v, n = 300) =>
         .trim()
         .slice(0, n)
     : "";
+// Expiry metadata is an authorization boundary. Corrupt or missing metadata
+// must fail closed instead of silently creating a session that never expires.
+export const expired = (value, now = Date.now()) => {
+  const at = Date.parse(value);
+  return !Number.isFinite(at) || at <= now;
+};
 export function assessment(x = {}) {
   const out = {};
   for (const k of [
@@ -78,6 +84,9 @@ export function eventValue(x) {
     confirmed: x.confirmed === true,
   };
 }
+// Every persisted caregiver event is consequential from the patient's point
+// of view. Observations may lead to a proposal, but never to delivery.
+export const hasPatientConfirmation = (event) => event?.confirmed === true;
 export function safeStatus(x = {}) {
   return {
     module: [

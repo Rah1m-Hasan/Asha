@@ -1,5 +1,5 @@
 import { store, base } from "../server/common.js";
-import { hash, equal } from "../server/logic.js";
+import { hash, equal, expired } from "../server/logic.js";
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     let removed = 0;
     for (const key of profiles) {
       const p = await store.read(key);
-      if (p && Date.parse(p.expiresAt) < Date.now()) {
+      if (p && expired(p.expiresAt)) {
         const group = keys.filter((k) => k.startsWith(base(p.patientId) + "/"));
         await store.remove(group);
         removed++;

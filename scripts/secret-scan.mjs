@@ -1,6 +1,11 @@
 import fs from "node:fs/promises";
 import { execFileSync } from "node:child_process";
-const maira = JSON.parse(await fs.readFile("D:/mairaapi.json", "utf8"));
+// An optional local credential file lets operators detect exact values without
+// baking a workstation path or any secret into the repository.
+const configPath = process.env.MAIRA_CONFIG_PATH;
+const maira = configPath
+  ? JSON.parse(await fs.readFile(configPath, "utf8"))
+  : {};
 const secrets = [maira.api_key, maira.project_key].filter(Boolean);
 const staged = process.argv.includes("--staged");
 const paths = execFileSync(
@@ -28,6 +33,7 @@ for (const path of paths) {
 console.log(
   JSON.stringify({
     filesChecked: paths.length,
+    exactSecretsLoaded: secrets.length,
     secretFindings: [...new Set(found)],
   }),
 );

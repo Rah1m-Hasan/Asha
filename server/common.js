@@ -1,6 +1,6 @@
 import { blobStore } from "./store.js";
 import { supabaseStore } from "./supabase-store.js";
-import { hash, equal } from "./logic.js";
+import { hash, equal, expired } from "./logic.js";
 export const store =
   process.env.SUPABASE_URL &&
   (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -27,6 +27,8 @@ export function begin(req, res) {
     ![
       "https://mysunatislam.github.io",
       "https://neurobridge-asha-live.vercel.app",
+      "https://asha-rahim-app-ora-3-jon.vercel.app",
+      "https://asha-unified-app.vercel.app",
       `https://${process.env.VERCEL_URL}`,
     ].includes(origin) &&
     !(process.env.LOCAL_DEV === "1" && /^http:\/\/127.0.0.1:\d+$/.test(origin))
@@ -47,7 +49,7 @@ export function body(req) {
 export async function authenticate(req, id) {
   if (!/^[a-f0-9]{24}$/.test(id || "")) return null;
   const p = await store.read(path(id, "profile"));
-  if (!p || Date.parse(p.expiresAt) < Date.now()) return null;
+  if (!p || expired(p.expiresAt)) return null;
   const token = String(req.headers.authorization || "").replace(/^Bearer /, "");
   const h = hash(token);
   const role = equal(h, p.patientHash)

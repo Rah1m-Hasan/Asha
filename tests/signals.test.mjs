@@ -12,6 +12,8 @@ import {
   assessment,
   recommend,
   eventValue,
+  expired,
+  hasPatientConfirmation,
   safeStatus,
   hash,
   equal,
@@ -115,6 +117,16 @@ test("server rejects unknown and emergency event names, sanitizes status", () =>
     eventValue({ kind: "water", text: "abc\nxyz", confirmed: true }).text,
     "abc xyz",
   );
+});
+test("expiry fails closed and every caregiver event requires patient confirmation", () => {
+  assert.equal(expired("not-a-date", 1), true);
+  assert.equal(expired(undefined, 1), true);
+  assert.equal(expired("1970-01-01T00:00:00.001Z", 1), true);
+  assert.equal(expired("1970-01-01T00:00:00.002Z", 1), false);
+  for (const kind of ["water", "test", "posture", "face_change"]) {
+    assert.equal(hasPatientConfirmation({ kind, confirmed: false }), false);
+    assert.equal(hasPatientConfirmation({ kind, confirmed: true }), true);
+  }
 });
 test("role tokens and push endpoints are restricted", () => {
   assert.ok(equal(hash("x"), hash("x")));

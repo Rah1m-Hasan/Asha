@@ -74,7 +74,7 @@ Chart.prototype.draw = function () {
   }
   c.stroke();
 };
-var chEar = new Chart(earChart, "#38e1ff", 0, 0.45);
+var chEar = new Chart(earChart, "#60a5fa", 0, 0.45);
 var chMar = new Chart(marChart, "#ff7ad9", 0, 0.8);
 var chMot = new Chart(motionChart, "#3dff9e", 0, 0.05);
 
@@ -922,7 +922,7 @@ function drawOverlay(lm) {
   if (showMesh) {
     // Sparse reference style: thin feature lines + dots, no dense fill.
     // Face oval passes over the forehead and under the chin (both lined).
-    strokeLoop(window.NF_LM.contour, "rgba(56,225,255,0.55)", 1.2, 0, true);
+    strokeLoop(window.NF_LM.contour, "rgba(96,165,250,0.72)", 1.2, 0, true);
     strokeLoop([70, 63, 105, 66, 107], INK, 1.3, 0, false);
     strokeLoop([336, 296, 334, 293, 300], INK, 1.3, 0, false);
     strokeLoop([33, 160, 158, 133, 153, 144], INK, 1.4, EYE_DY, true);
@@ -964,7 +964,7 @@ function drawOverlay(lm) {
 function drawDemoOverlay(t) {
   var W = overlay.width, H = overlay.height;
   octx.clearRect(0, 0, W, H);
-  octx.strokeStyle = "rgba(56,225,255,.5)"; octx.lineWidth = 1.5;
+  octx.strokeStyle = "rgba(96,165,250,.7)"; octx.lineWidth = 1.5;
   octx.beginPath(); octx.ellipse(W / 2, H / 2, W * 0.22, H * 0.32, 0, 0, 7); octx.stroke();
   var blink = (Math.sin(t * 2.3) > 0.985) ? 0.15 : 1;
   octx.strokeStyle = "#3dff9e";

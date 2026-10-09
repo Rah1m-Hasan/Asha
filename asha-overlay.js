@@ -11,20 +11,20 @@
   style.textContent = `
     #asha-guide-root{position:fixed;inset:0;pointer-events:none;z-index:2147483000;font:14px/1.45 Inter,system-ui,sans-serif;color:#eef8ff}
     #asha-guide-root *{box-sizing:border-box}
-    #asha-float{pointer-events:auto;position:fixed;left:calc(100vw - 92px);top:calc(100vh - 100px);width:70px;height:70px;border:3px solid #5ce2dc;border-radius:50%;padding:0;background:#153c5c;box-shadow:0 8px 30px #000a;touch-action:none;cursor:grab;overflow:hidden}
+    #asha-float{pointer-events:auto;position:fixed;left:calc(100vw - 92px);top:calc(100vh - 100px);width:70px;height:70px;border:3px solid #60a5fa;border-radius:50%;padding:0;background:#15345b;box-shadow:0 8px 30px #000a;touch-action:none;cursor:grab;overflow:hidden}
     #asha-float:active{cursor:grabbing}#asha-float img{width:100%;height:100%;object-fit:cover}
     #asha-float:focus-visible,#asha-guide-root button:focus-visible,#asha-guide-root input:focus-visible{outline:3px solid #fff;outline-offset:3px}
     #asha-panel{pointer-events:auto;position:fixed;right:16px;bottom:105px;width:min(380px,calc(100vw - 24px));max-height:min(570px,calc(100vh - 120px));display:flex;flex-direction:column;border:1px solid #5a7795;border-radius:18px;background:#102138;box-shadow:0 20px 60px #000b;overflow:hidden}
     #asha-panel[hidden]{display:none}#asha-panel header{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:#19334e;color:#f1ffff}#asha-panel header strong{font-size:17px}
     #asha-panel button{cursor:pointer}#asha-close{border:0;background:transparent;color:#fff;font-size:23px;padding:0 4px}
     #asha-log{padding:14px;overflow-y:auto;min-height:100px;max-height:260px;display:flex;flex-direction:column;gap:10px}
-    .asha-msg{max-width:93%;padding:10px 12px;border-radius:13px;background:#29445d;white-space:pre-wrap;word-break:break-word}.asha-msg.me{align-self:flex-end;background:#16585e}
+    .asha-msg{max-width:93%;padding:10px 12px;border-radius:13px;background:#29445d;white-space:pre-wrap;word-break:break-word}.asha-msg.me{align-self:flex-end;background:#1d4ed8}
     #asha-options{display:flex;gap:7px;flex-wrap:wrap;padding:0 14px 12px}#asha-options button{border:1px solid #56849a;background:#193f52;color:#e8feff;border-radius:50px;padding:6px 10px}
-    #asha-consent,#asha-voice-label{display:flex;align-items:flex-start;gap:9px;padding:8px 14px;color:#c6d6e5;font-size:12px}#asha-consent input,#asha-voice-label input{margin-top:2px;accent-color:#59dad5}
-    #asha-form{display:flex;gap:7px;padding:10px 13px 14px}#asha-input{min-width:0;flex:1;border:1px solid #57758e;border-radius:10px;padding:10px;background:#0b192c;color:#fff}#asha-send{border:0;border-radius:10px;padding:10px 13px;background:#63d8d7;color:#06292a;font-weight:700}
-    #asha-panel footer{padding:0 14px 11px;font-size:11px;color:#a7bbc9}#asha-panel footer a{color:#8fe0e2}
+    #asha-consent,#asha-voice-label{display:flex;align-items:flex-start;gap:9px;padding:8px 14px;color:#c6d6e5;font-size:12px}#asha-consent input,#asha-voice-label input{margin-top:2px;accent-color:#60a5fa}
+    #asha-form{display:flex;gap:7px;padding:10px 13px 14px}#asha-input{min-width:0;flex:1;border:1px solid #57758e;border-radius:10px;padding:10px;background:#0b192c;color:#fff}#asha-send{border:0;border-radius:10px;padding:10px 13px;background:#2563eb;color:#fff;font-weight:700}
+    #asha-panel footer{padding:0 14px 11px;font-size:11px;color:#a7bbc9}#asha-panel footer a{color:#93c5fd}
     html[data-theme=light]{--bg:#f4f8fc;--bg2:#eaf2f8;--glass:#fffffff2;--stroke:#bfd3df;--txt:#173348;--muted:#526d80;--surface:#fff;--surface-2:#e9f2f8;--line:#bdd3df;--text:#173348;--text-dim:#526d80}
-    html[data-theme=light] #asha-panel{background:#fff;color:#173348;border-color:#afcbd9}html[data-theme=light] #asha-panel header{background:#dfedf4;color:#173348}html[data-theme=light] #asha-close{color:#173348}html[data-theme=light] .asha-msg{background:#e2eff5;color:#173348}html[data-theme=light] .asha-msg.me{background:#bce9e5}html[data-theme=light] #asha-input{background:#fff;color:#173348}html[data-theme=light] #asha-consent,html[data-theme=light] #asha-voice-label,html[data-theme=light] #asha-panel footer{color:#426176}
+    html[data-theme=light] #asha-panel{background:#fff;color:#172b4d;border-color:#dbe5f0}html[data-theme=light] #asha-panel header{background:#eff6ff;color:#172b4d}html[data-theme=light] #asha-close{color:#172b4d}html[data-theme=light] .asha-msg{background:#eff6ff;color:#172b4d}html[data-theme=light] .asha-msg.me{background:#dbeafe}html[data-theme=light] #asha-input{background:#fff;color:#172b4d}html[data-theme=light] #asha-consent,html[data-theme=light] #asha-voice-label,html[data-theme=light] #asha-panel footer{color:#64748b}
   `;
   document.head.append(style);
 

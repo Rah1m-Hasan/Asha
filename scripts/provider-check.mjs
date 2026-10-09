@@ -1,5 +1,9 @@
 import fs from "node:fs/promises";
-const k = JSON.parse(await fs.readFile("D:/mairaapi.json", "utf8"));
+if (!process.env.MAIRA_CONFIG_PATH)
+  throw Error("Set MAIRA_CONFIG_PATH to an operator-local credential file.");
+const k = JSON.parse(
+  await fs.readFile(process.env.MAIRA_CONFIG_PATH, "utf8"),
+);
 for (const endpoint of ["voice-typing/session", "realtime/sessions"]) {
   const r = await fetch("https://api.recommender.gigalogy.com/v1/" + endpoint, {
     method: "POST",

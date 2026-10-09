@@ -455,7 +455,7 @@ export class Perception extends EventTarget {
         [24, 26],
         [26, 28],
       ],
-      "#63e5c4",
+      "#60a5fa",
     );
     lines(
       this.faceResult?.faceLandmarks?.[0],
@@ -484,7 +484,7 @@ export class Perception extends EventTarget {
       lines(
         faceLm,
         ids.slice(1).map((id, i) => [ids[i], id]),
-        "#63e5c4",
+        "#60a5fa",
       );
     }
   }
@@ -494,39 +494,51 @@ export class Perception extends EventTarget {
       return this.yoloEnabled;
     }
     this.emit("status", "Loading YOLO posture cross-check…");
-    this.yoloWorker = new Worker(new URL("./yolo-worker.js", import.meta.url), {
+    const worker = new Worker(new URL("./yolo-worker.js", import.meta.url), {
       type: "module",
     });
+    this.yoloWorker = worker;
     await new Promise((resolve, reject) => {
-      const timer = setTimeout(
-        () => reject(Error("YOLO initialization timed out")),
-        45000,
-      );
-      this.yoloWorker.onmessage = ({ data: d }) => {
-        if (d.type === "ready") {
-          clearTimeout(timer);
-          resolve();
-        }
-        if (d.type === "error") {
-          clearTimeout(timer);
-          this.yoloBusy = false;
-          reject(Error(d.message));
+      let ready = false;
+      const finish = (error) => {
+        clearTimeout(timer);
+        this.yoloBusy = false;
+        worker.terminate();
+        if (this.yoloWorker === worker) this.yoloWorker = null;
+        this.yoloEnabled = false;
+        this.yoloResult = null;
+        if (!ready) reject(error);
+        else if (this.running)
           this.emit(
             "status",
             "YOLO unavailable · lightweight pose remains active",
           );
+      };
+      const timer = setTimeout(
+        () => finish(Error("YOLO initialization timed out")),
+        45000,
+      );
+      this.yoloInitCancel = () => finish(Error("YOLO initialization cancelled"));
+      worker.onmessage = ({ data: d }) => {
+        if (worker !== this.yoloWorker) return;
+        if (d.type === "ready") {
+          clearTimeout(timer);
+          ready = true;
+          this.yoloInitCancel = null;
+          resolve();
+        }
+        if (d.type === "error") {
+          finish(Error(d.message));
         }
         if (d.type === "result") {
           this.yoloBusy = false;
-          this.yoloResult = d;
+          if (this.running && this.yoloWorker === worker) this.yoloResult = d;
         }
       };
-      this.yoloWorker.onerror = () => {
-        clearTimeout(timer);
-        reject(Error("YOLO worker failed"));
-      };
-      this.yoloWorker.postMessage({ type: "init" });
+      worker.onerror = () => finish(Error("YOLO worker failed"));
+      worker.postMessage({ type: "init" });
     });
+    if (this.yoloWorker !== worker) throw Error("YOLO initialization cancelled");
     this.yoloEnabled = true;
     return true;
   }
@@ -544,9 +556,13 @@ export class Perception extends EventTarget {
     this.lastHandFrame = this.lastFrame = 0;
     for (const m of [this.face, this.hand, this.pose]) m?.close();
     this.face = this.hand = this.pose = null;
+    this.yoloInitCancel?.();
+    this.yoloInitCancel = null;
     this.yoloWorker?.terminate();
     this.yoloWorker = null;
     this.yoloEnabled = false;
+    this.yoloBusy = false;
+    this.yoloResult = null;
     this.busy = false;
     this.rest.reset();
     this.analysis.reset();

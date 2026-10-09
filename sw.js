@@ -1,15 +1,30 @@
-const CACHE = "asha-live-v1";
+// Model paths are stable across releases. Prefer the network so a deployed
+// model and the current JavaScript cannot drift apart, while retaining the
+// last verified copy for offline use.
+const CACHE = "asha-live-models-v3";
+const CACHE_PREFIX = "asha-live-models-";
 self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((c) => c.addAll(["./app/style.css", "./app/icon.svg"]))
+      .then((c) => c.addAll(["./app/style.css", "./app/blue-theme.css", "./app/icon.svg"]))
       .catch(() => {}),
   );
 });
 self.addEventListener("activate", (event) =>
-  event.waitUntil(self.clients.claim()),
+  event.waitUntil(
+    Promise.all([
+      self.clients.claim(),
+      caches.keys().then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE)
+            .map((key) => caches.delete(key)),
+        ),
+      ),
+    ]),
+  ),
 );
 // Only immutable model assets are cached. Private API responses are never cached.
 self.addEventListener("fetch", (event) => {
@@ -21,11 +36,13 @@ self.addEventListener("fetch", (event) => {
   ) {
     event.respondWith(
       caches.open(CACHE).then(async (cache) => {
-        const hit = await cache.match(event.request);
-        if (hit) return hit;
-        const r = await fetch(event.request);
-        if (r.ok) cache.put(event.request, r.clone());
-        return r;
+        try {
+          const response = await fetch(event.request);
+          if (response.ok) await cache.put(event.request, response.clone());
+          return response;
+        } catch {
+          return (await cache.match(event.request)) || Response.error();
+        }
       }),
     );
   }
