@@ -1,11 +1,13 @@
 export const siteBase = new URL('./', import.meta.url);
 export const apiBase = 'https://neurobridge-asha-maira-relay.vercel.app/api/v1/demo/session';
 
+const themeIcon = (name) => `<svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${name === 'moon' ? '<path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/>' : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'}</svg>`;
+
 export function applyTheme() {
   document.documentElement.dataset.theme = localStorage.getItem('asha_theme') === 'light' ? 'light' : 'dark';
   document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
     const light = document.documentElement.dataset.theme === 'light';
-    button.textContent = light ? '☾ Dark' : '☀ Light';
+    button.innerHTML = themeIcon(light ? 'moon' : 'sun');
     button.setAttribute('aria-pressed', String(light));
     button.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
   });

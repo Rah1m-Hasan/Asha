@@ -1,5 +1,14 @@
 (() => {
   if (document.getElementById('asha-guide-root')) return;
+  const icon = (name, size = 20) => {
+    const paths = {
+      x: '<path d="M18 6 6 18M6 6l12 12"/>',
+      send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+      sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
+      moon: '<path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/>',
+    };
+    return `<svg aria-hidden="true" focusable="false" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths[name]}</svg>`;
+  };
   const script = document.currentScript;
   const context = script?.dataset.ashaContext || document.title || 'NeuroBridge Asha';
   const assetUrl = new URL('./assets/assets/images/asha-avatar.png', script.src).href;
@@ -16,12 +25,12 @@
     #asha-float:focus-visible,#asha-guide-root button:focus-visible,#asha-guide-root input:focus-visible{outline:3px solid #fff;outline-offset:3px}
     #asha-panel{pointer-events:auto;position:fixed;right:16px;bottom:105px;width:min(380px,calc(100vw - 24px));max-height:min(570px,calc(100vh - 120px));display:flex;flex-direction:column;border:1px solid #5a7795;border-radius:18px;background:#102138;box-shadow:0 20px 60px #000b;overflow:hidden}
     #asha-panel[hidden]{display:none}#asha-panel header{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:#19334e;color:#f1ffff}#asha-panel header strong{font-size:17px}
-    #asha-panel button{cursor:pointer}#asha-close{border:0;background:transparent;color:#fff;font-size:23px;padding:0 4px}
+    #asha-panel button{cursor:pointer}#asha-close{display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:10px;background:transparent;color:#fff;padding:0}#asha-close svg{width:20px;height:20px}
     #asha-log{padding:14px;overflow-y:auto;min-height:100px;max-height:260px;display:flex;flex-direction:column;gap:10px}
     .asha-msg{max-width:93%;padding:10px 12px;border-radius:13px;background:#29445d;white-space:pre-wrap;word-break:break-word}.asha-msg.me{align-self:flex-end;background:#1d4ed8}
-    #asha-options{display:flex;gap:7px;flex-wrap:wrap;padding:0 14px 12px}#asha-options button{border:1px solid #56849a;background:#193f52;color:#e8feff;border-radius:50px;padding:6px 10px}
+    #asha-options{display:flex;gap:7px;flex-wrap:wrap;padding:0 14px 12px}#asha-options button{border:1px solid #56849a;background:#193f52;color:#e8feff;border-radius:50px;padding:6px 10px}#asha-theme-button{display:grid;place-items:center;min-width:44px;min-height:36px;padding:6px!important}#asha-theme-button svg{width:18px;height:18px}
     #asha-consent,#asha-voice-label{display:flex;align-items:flex-start;gap:9px;padding:8px 14px;color:#c6d6e5;font-size:12px}#asha-consent input,#asha-voice-label input{margin-top:2px;accent-color:#60a5fa}
-    #asha-form{display:flex;gap:7px;padding:10px 13px 14px}#asha-input{min-width:0;flex:1;border:1px solid #57758e;border-radius:10px;padding:10px;background:#0b192c;color:#fff}#asha-send{border:0;border-radius:10px;padding:10px 13px;background:#2563eb;color:#fff;font-weight:700}
+    #asha-form{display:flex;gap:7px;padding:10px 13px 14px}#asha-input{min-width:0;flex:1;border:1px solid #57758e;border-radius:10px;padding:10px;background:#0b192c;color:#fff}#asha-send{display:grid;place-items:center;min-width:44px;min-height:44px;border:0;border-radius:10px;padding:10px;background:#2563eb;color:#fff;font-weight:700}#asha-send svg{width:21px;height:21px}
     #asha-panel footer{padding:0 14px 11px;font-size:11px;color:#a7bbc9}#asha-panel footer a{color:#93c5fd}
     html[data-theme=light]{--bg:#f4f8fc;--bg2:#eaf2f8;--glass:#fffffff2;--stroke:#bfd3df;--txt:#173348;--muted:#526d80;--surface:#fff;--surface-2:#e9f2f8;--line:#bdd3df;--text:#173348;--text-dim:#526d80}
     html[data-theme=light] #asha-panel{background:#fff;color:#172b4d;border-color:#dbe5f0}html[data-theme=light] #asha-panel header{background:#eff6ff;color:#172b4d}html[data-theme=light] #asha-close{color:#172b4d}html[data-theme=light] .asha-msg{background:#eff6ff;color:#172b4d}html[data-theme=light] .asha-msg.me{background:#dbeafe}html[data-theme=light] #asha-input{background:#fff;color:#172b4d}html[data-theme=light] #asha-consent,html[data-theme=light] #asha-voice-label,html[data-theme=light] #asha-panel footer{color:#64748b}
@@ -33,12 +42,12 @@
   root.innerHTML = `
     <button id="asha-float" type="button" aria-label="Asha guide. Drag to move, tap to chat"><img alt="" src="${assetUrl}"></button>
     <section id="asha-panel" aria-label="Asha companion" hidden>
-      <header><strong>Asha · here to guide you</strong><button id="asha-close" type="button" aria-label="Close Asha">×</button></header>
+      <header><strong>Asha · here to guide you</strong><button id="asha-close" type="button" aria-label="Close Asha">${icon('x')}</button></header>
       <div id="asha-log" role="log" aria-live="polite"></div>
-      <div id="asha-options"><button type="button" data-asha-tip="guide">Guide me</button><button type="button" data-asha-tip="privacy">Privacy</button><button type="button" id="asha-theme-button">☀ Light</button></div>
+      <div id="asha-options"><button type="button" data-asha-tip="guide">Guide me</button><button type="button" data-asha-tip="privacy">Privacy</button><button type="button" id="asha-theme-button" aria-label="Toggle theme"></button></div>
       <label id="asha-consent"><input id="asha-opt-in" type="checkbox"><span>Send only my typed message to Maira for a cloud reply. Do not enter identifying patient details.</span></label>
       <label id="asha-voice-label"><input id="asha-voice" type="checkbox"><span>Speak Asha's replies aloud</span></label>
-      <form id="asha-form"><input id="asha-input" maxlength="350" placeholder="Ask Asha…" aria-label="Message Asha"><button id="asha-send" type="submit">Send</button></form>
+      <form id="asha-form"><input id="asha-input" maxlength="350" placeholder="Ask Asha…" aria-label="Message Asha"><button id="asha-send" type="submit" aria-label="Send message">${icon('send', 21)}</button></form>
       <footer>Suggestions are not medical advice. <a id="asha-open-app" href="${appUrl}">Open Asha app</a></footer>
     </section>`;
   document.body.append(root);
@@ -53,14 +62,15 @@
   function setTheme(theme) {
     document.documentElement.dataset.theme = theme;
     document.body.classList.toggle('light', theme === 'light');
-    themeButton.textContent = theme === 'light' ? '☾ Dark' : '☀ Light';
+    themeButton.innerHTML = icon(theme === 'light' ? 'moon' : 'sun');
+    themeButton.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
   }
   setTheme(localStorage.getItem('asha_theme') === 'light' ? 'light' : 'dark');
   themeButton.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     localStorage.setItem('asha_theme', next);
     setTheme(next);
-    document.querySelectorAll('[data-theme-toggle]').forEach((button) => { button.textContent = next === 'light' ? '☾ Dark' : '☀ Light'; });
+    document.querySelectorAll('[data-theme-toggle]').forEach((button) => { button.setAttribute('aria-label', next === 'light' ? 'Switch to dark theme' : 'Switch to light theme'); });
     const vitalButton = document.getElementById('themeToggle');
     if (vitalButton) vitalButton.textContent = next === 'light' ? '☾ Dark' : '☀ Light';
   });

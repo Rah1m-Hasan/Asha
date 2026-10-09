@@ -274,7 +274,7 @@
   content: "";
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: 12px;
   background: var(--accent);
 }
 .face-overview-grid,
@@ -1524,6 +1524,107 @@ body.app-active .landing-try {
     grid-column: auto;
   }
 }
+
+/* Shared ASHA icon system: local outline SVGs use these context-aware tokens. */
+:root {
+  --icon-xs: 16px;
+  --icon-sm: 18px;
+  --icon-md: 20px;
+  --icon-nav: 22px;
+  --icon-module: 28px;
+  --icon-primary: #2563eb;
+  --icon-secondary: #64748b;
+  --icon-ink: #172b4d;
+  --icon-soft: #eff6ff;
+}
+html[data-theme="dark"] {
+  --icon-primary: #60a5fa;
+  --icon-secondary: #a8b8cc;
+  --icon-ink: #f1f5f9;
+  --icon-soft: #17263d;
+}
+.asha-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  stroke-width: 2;
+}
+button > .asha-icon,
+a > .asha-icon {
+  margin-inline: 0;
+}
+.primary .asha-icon,
+.tabs button.active .asha-icon {
+  color: currentColor;
+}
+.secondary .asha-icon,
+.text-button .asha-icon {
+  color: var(--icon-primary);
+}
+.icon-button {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  color: var(--icon-ink);
+}
+.icon-button .asha-icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+.tabs button > span:first-child {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+}
+.tabs button > span:first-child .asha-icon {
+  width: var(--icon-nav);
+  height: var(--icon-nav);
+  color: var(--icon-primary);
+}
+.tabs button.active > span:first-child {
+  background: none;
+}
+.tabs button.active > span:first-child .asha-icon {
+  color: currentColor;
+}
+.bottom-nav span { font-size: inherit; }
+.bottom-nav .asha-icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  color: var(--icon-secondary);
+}
+.bottom-nav button.active .asha-icon { color: var(--icon-primary); }
+.module-hero h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.module-hero h2 .asha-icon {
+  width: var(--icon-module);
+  height: var(--icon-module);
+  padding: 6px;
+  border-radius: 10px;
+  color: var(--icon-primary);
+  background: var(--icon-soft);
+  box-sizing: content-box;
+}
+.module-safety-note {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.chat-panel form .primary {
+  min-width: 48px;
+  padding: 12px;
+  gap: 0;
+}
+.chat-panel form .primary .asha-icon { width: 21px; height: 21px; }
+@media (max-width: 390px) {
+  .tabs button > span:first-child .asha-icon { width: 20px; height: 20px; }
+  .bottom-nav .asha-icon { width: 18px; height: 18px; }
+}
 @media (max-width: 360px) {
   .landing-topbar {
     padding-left: 14px;
@@ -2296,14 +2397,10 @@ em {
   min-height: 44px;
 }
 .tabs button span {
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 7px;
-  background: var(--soft);
-  color: var(--accent);
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
 }
 .tabs button small {
   font-size: 0.64rem;
@@ -3463,3 +3560,19 @@ body.app-active .chat-panel {
     flex: 1 1 calc(50% - var(--space-1));
   }
 }
+
+/* Keep icon rules after the legacy application rules they intentionally refine. */
+.icon-button { border-radius: 12px; }
+.primary:has(> .asha-icon),
+.secondary:has(> .asha-icon) { gap: 8px; }
+.tabs button > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  background: none;
+  color: currentColor;
+}
+.tabs button.active > span:first-child { background: none; }
+.bottom-nav span { font-size: inherit; }

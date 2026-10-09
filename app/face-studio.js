@@ -1,3 +1,5 @@
+import { icon, iconButton } from "./icons.js";
+
 const $ = (id) => document.getElementById(id);
 const escape = (value) =>
   String(value ?? "").replace(
@@ -24,13 +26,13 @@ const units = [
 export function faceStudio() {
   return `<div class="face-studio module-workspace">
     <header class="module-hero face-studio-title">
-      <div><span class="eyebrow">FACESPEAK · NEUROFACE SENSE</span><h2>NeuroFace Sense</h2><p>Communicate through calibrated facial movements. Use the shared camera to observe a face, prepare a comfortable response, and review every proposed request before it is sent.</p></div>
-      <div class="module-hero-actions"><button id="nf-calibrate" class="primary">Start calibration</button><button id="nf-reference" class="secondary">Relearn relaxed reference</button></div>
+      <div><span class="eyebrow">FACESPEAK · NEUROFACE SENSE</span><h2>${icon("scan-face", { size: 28 })}NeuroFace Sense</h2><p>Communicate through calibrated facial movements. Use the shared camera to observe a face, prepare a comfortable response, and review every proposed request before it is sent.</p></div>
+      <div class="module-hero-actions"><button id="nf-calibrate" class="primary">${iconButton("sliders", "Start calibration")}</button><button id="nf-reference" class="secondary">${iconButton("rotate-ccw", "Relearn relaxed reference")}</button></div>
       <p id="nf-pipeline" class="module-live-status" role="status">Start the camera, then relax briefly to learn the neutral reference.</p>
     </header>
     <div class="face-overview-grid">
       <section class="card face-readiness-card"><div class="section-heading"><div><span class="eyebrow">LIVE RECOGNITION</span><h3>Facial signal status</h3></div><span class="status-badge" aria-hidden="true">Live</span></div><p class="small muted">Observed signals support calibration; they are not a score of motor ability.</p>${row(["Eye signal", "eyeScore"], ["Lip signal", "lipScore"], ["Smile balance", "smileScore"], ["Head signal", "headScore"])}<p id="nf-alert" class="observation-status" role="status">Start the camera to observe movement.</p></section>
-      <section class="card face-calibration-card"><span class="eyebrow">PERSONAL SETUP</span><h3>Calibrate a comfortable response</h3><ol class="calibration-steps"><li><b>1</b><span>Start the shared camera and settle into a relaxed position.</span></li><li><b>2</b><span>Choose a head, smile, or deliberate blink response that feels comfortable.</span></li><li><b>3</b><span>Practice a separate confirmation before a request can be sent.</span></li></ol><p id="faceCalibrationStatus" class="small muted"></p><button id="nf-calibrateRules" class="secondary">Open guided gesture calibration</button></section>
+      <section class="card face-calibration-card"><span class="eyebrow">PERSONAL SETUP</span><h3>Calibrate a comfortable response</h3><ol class="calibration-steps"><li><b>1</b><span>Start the shared camera and settle into a relaxed position.</span></li><li><b>2</b><span>Choose a head, smile, or deliberate blink response that feels comfortable.</span></li><li><b>3</b><span>Practice a separate confirmation before a request can be sent.</span></li></ol><p id="faceCalibrationStatus" class="small muted"></p><button id="nf-calibrateRules" class="secondary">${iconButton("sliders", "Open guided gesture calibration")}</button></section>
     </div>
     <section class="card facespeak-reference"><div class="section-heading"><div><span class="eyebrow">GESTURE REFERENCE</span><h3>Available communication responses</h3></div><span class="small muted">Personal calibration required</span></div><div id="nf-rules" class="gesture-reference-list"></div><p class="small muted">Three quick practiced blinks ask Asha for help. A separate deliberate blink confirms only after Asha asks. Normal blink counts alone never send a request.</p></section>
     <details class="face-diagnostics" open><summary><span><span class="eyebrow">DETAILS</span> Live facial observations</span><span class="small muted">Eye, expression, lip, motion and head movement</span></summary><div class="face-module-grid">
