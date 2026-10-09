@@ -1681,7 +1681,16 @@ main:focus {
 .landing-brand-logo { display: block; width: clamp(150px, 12vw, 180px); height: auto; max-height: 54px; object-fit: contain; }
 .footer-brand { display: inline-flex; align-items: center; min-height: 54px; }
 .footer-brand-logo { display: block; width: 160px; height: 54px; object-fit: contain; }
+.landing-brand-logo--dark, .footer-brand-logo--dark { display: none; }
+html[data-theme="dark"] .landing-brand-logo--light,
+html[data-theme="dark"] .footer-brand-logo--light { display: none; }
+html[data-theme="dark"] .landing-brand-logo--dark,
+html[data-theme="dark"] .footer-brand-logo--dark { display: block; }
 @media (max-width: 760px) {
   .landing-brand-logo { width: 44px; height: 40px; max-height: 40px; }
   .footer-brand-logo { width: 150px; height: auto; }
+}
+@media (max-width: 520px) {
+  html[data-theme="dark"] .landing-brand-logo--light { display: block; }
+  html[data-theme="dark"] .landing-brand-logo--dark { display: none; }
 }
