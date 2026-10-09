@@ -265,7 +265,7 @@ $("themeButton").onclick = () => {
   settings.theme = settings.theme === "dark" ? "light" : "dark";
   theme();
 };
-$("settingsButton").onclick = () => show("settings");
+$("settingsButton")?.addEventListener("click", () => show("settings"));
 $("settingsBack").onclick = () =>
   show(previousView === "settings" ? "patient" : previousView);
 $("beginSetup").onclick = $("addPatient").onclick = () => startSetup();
@@ -284,7 +284,10 @@ const landingActions = {
   caregiver: () => show("caregiver"),
 };
 document.querySelectorAll("[data-landing-action]").forEach((button) => {
-  button.addEventListener("click", () => landingActions[button.dataset.landingAction]?.());
+  button.addEventListener("click", () => {
+    if (button.closest("#landingMobileMenu")) closeLandingMenu();
+    landingActions[button.dataset.landingAction]?.();
+  });
 });
 const menuToggle = $("landingMenuToggle");
 const mobileMenu = $("landingMobileMenu");
@@ -300,8 +303,19 @@ menuToggle?.addEventListener("click", () => {
   menuToggle.setAttribute("aria-expanded", String(willOpen));
   if (willOpen) mobileMenu.querySelector("a, button")?.focus();
 });
+$("landingMenuSettings")?.addEventListener("click", () => {
+  closeLandingMenu();
+  show("settings");
+});
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeLandingMenu({ restoreFocus: true });
+});
+document.addEventListener("pointerdown", (event) => {
+  if (
+    !mobileMenu?.hidden &&
+    !mobileMenu.contains(event.target) &&
+    !menuToggle?.contains(event.target)
+  ) closeLandingMenu();
 });
 document.querySelectorAll("[data-landing-section]").forEach((link) => {
   link.addEventListener("click", (event) => {

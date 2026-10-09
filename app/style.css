@@ -1666,3 +1666,22 @@ main:focus {
   .landing-page .section-heading { margin-bottom: 36px; }
   .landing-page .section-heading h2 { font-size: clamp(2rem, 9vw, 2.7rem); }
 }
+
+/* Navbar utility menu: settings moves here so the action bar stays uncluttered. */
+.landing-menu-toggle { display: inline-grid; }
+.landing-mobile-menu { position: absolute; top: calc(100% + 8px); right: max(5vw, 28px); width: 224px; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+.landing-mobile-menu:not([hidden]) { display: block; animation: landing-menu-in .16s ease-out; }
+.landing-menu-nav { display: grid; gap: 3px; }
+.landing-menu-nav > a, .landing-menu-nav > .primary { display: none; }
+.landing-menu-settings { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 42px; padding: 10px 11px; border: 0; border-radius: 9px; background: transparent; color: var(--ink); font-size: .86rem; font-weight: 650; text-align: left; }
+.landing-menu-settings span { color: var(--accent); font-size: 1rem; }
+.landing-menu-settings:hover, .landing-menu-settings:focus-visible { background: var(--soft); color: var(--accent); }
+body.app-active .landing-menu-toggle { display: inline-grid; }
+@keyframes landing-menu-in { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 1000px) {
+  .landing-mobile-menu { left: 20px; right: 20px; width: auto; padding: 12px; }
+  .landing-menu-nav { gap: 2px; }
+  .landing-menu-nav > a { display: block; padding: 11px 10px; border-radius: 8px; color: var(--ink); font-size: .93rem; font-weight: 600; text-decoration: none; }
+  .landing-menu-nav > a:hover, .landing-menu-nav > a:focus-visible { background: var(--soft); color: var(--accent); }
+  .landing-menu-nav > .primary { display: inline-flex; width: 100%; margin-top: 7px; gap: 8px; }
+}
