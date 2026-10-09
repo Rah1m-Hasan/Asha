@@ -16,68 +16,127 @@
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <header class="topbar">
-      <a class="brand" href="./"
-        ><span class="brandmark">a</span
+    <header class="topbar landing-topbar">
+      <a class="brand" href="#home" data-landing-section="home" aria-label="ASHA home"
+        ><span class="brandmark" aria-hidden="true">a</span
         ><span>asha<small>NEUROBRIDGE</small></span></a
       >
+      <nav class="landing-nav" aria-label="Primary navigation">
+        <a href="#home" data-landing-section="home">Home</a>
+        <a href="#how-it-works" data-landing-section="how-it-works">How It Works</a>
+        <a href="#features" data-landing-section="features">Features</a>
+        <a href="#who-its-for" data-landing-section="who-its-for">Who It’s For</a>
+        <a href="#about" data-landing-section="about">About ASHA</a>
+      </nav>
       <div class="top-actions">
-        <span id="cloudBadge" class="pill">Your companion</span
-        ><button
-          id="themeButton"
-          class="icon-button"
-          aria-label="Switch color theme"
-        >
-          ☾</button
-        ><button id="settingsButton" class="icon-button" aria-label="Settings">
-          ⚙
-        </button>
+        <span id="cloudBadge" class="pill landing-status">Your companion</span>
+        <button id="themeButton" class="icon-button" aria-label="Switch color theme">☾</button>
+        <button id="settingsButton" class="icon-button landing-settings" aria-label="Settings">⚙</button>
+        <button class="primary landing-try" data-landing-action="demo">Try ASHA <span aria-hidden="true">→</span></button>
+        <button id="landingMenuToggle" class="icon-button landing-menu-toggle" aria-expanded="false" aria-controls="landingMobileMenu" aria-label="Open navigation menu">☰</button>
+      </div>
+      <div id="landingMobileMenu" class="landing-mobile-menu" hidden>
+        <nav aria-label="Mobile navigation">
+          <a href="#home" data-landing-section="home">Home</a>
+          <a href="#how-it-works" data-landing-section="how-it-works">How It Works</a>
+          <a href="#features" data-landing-section="features">Features</a>
+          <a href="#who-its-for" data-landing-section="who-its-for">Who It’s For</a>
+          <a href="#about" data-landing-section="about">About ASHA</a>
+          <button class="primary" data-landing-action="demo">Try ASHA →</button>
+        </nav>
       </div>
     </header>
     <main id="main" tabindex="-1">
-      <section id="welcome" class="view welcome">
-        <div class="welcome-copy">
-          <span class="eyebrow"
-            >A LITTLE SUPPORT. A LOT MORE INDEPENDENCE.</span
-          >
-          <h1>Asha is here.<br /><em>And you’re not alone.</em></h1>
-          <p class="lead">
-            Communicate in your own way. Asha brings your voice, movements, and
-            care circle together.
-          </p>
-          <div class="actions">
-            <button id="exploreDemo" class="primary">Explore live demo ↗</button
-            ><button id="beginSetup" class="secondary">
-              Set up with a caregiver</button
-            ><button id="openPatient" class="text-button">I have a patient link</button>
+      <section id="welcome" class="view landing-page">
+        <section id="home" class="landing-hero" aria-labelledby="hero-title">
+          <div class="landing-hero-copy">
+            <span class="eyebrow">AI-POWERED ASSISTIVE COMMUNICATION</span>
+            <h1 id="hero-title">Every voice deserves<br />to be heard.</h1>
+            <p class="landing-lead">ASHA helps people with limited speech or movement communicate through touch, gestures, and assisted speech—while keeping caregivers connected.</p>
+            <div class="actions landing-actions">
+              <button id="exploreDemo" class="primary">Explore Live Demo <span aria-hidden="true">→</span></button>
+              <button id="beginSetup" class="secondary" aria-label="Set up with a caregiver">Set Up With a Caregiver</button>
+            </div>
+            <div class="landing-entry-links">
+              <button id="openPatient" class="text-button">Already have a patient link?</button>
+              <button id="openCare" class="text-button">Caregiver access <span aria-hidden="true">→</span></button>
+            </div>
+            <p class="landing-microcopy">Camera access begins only when you choose to start support.</p>
           </div>
-          <p class="small muted">Explore the live modules now. Camera access starts when you tap Start support. A caregiver link is only needed to test alerts on another device.</p>
-          <button id="openCare" class="text-button">
-            Open caregiver dashboard →
-          </button>
-          <div class="welcome-note">
-            <i class="status-dot"></i>One camera. Personal guidance. Connected
-            care.
+          <div class="product-stage" aria-label="Illustrative ASHA product preview">
+            <div class="product-stage-label">Illustrative product preview</div>
+            <div class="device-frame">
+              <div class="device-top"><span></span></div>
+              <div class="device-screen">
+                <div class="preview-topline"><strong>asha</strong><span class="preview-live">● Ready</span></div>
+                <div class="preview-welcome"><img src="./assets/assets/images/asha-avatar.png" alt="" /><div><small>YOUR SPACE</small><strong>How can I help?</strong></div></div>
+                <div class="preview-request"><span class="preview-icon" aria-hidden="true">⌁</span><div><small>COMMUNICATION REQUEST</small><strong>I need water</strong><p>Review before sending to your caregiver.</p></div></div>
+                <div class="preview-confirm"><span aria-hidden="true">✓</span> Confirmation required</div>
+                <div class="preview-actions"><span>Touch</span><span>FaceSpeak</span><span>Speak</span></div>
+              </div>
+            </div>
+            <div class="connection-note"><span class="connection-avatar" aria-hidden="true">♡</span><span><strong>Care circle connected</strong><small>Requests are delivered for acknowledgement.</small></span></div>
           </div>
-        </div>
-        <div class="welcome-art">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="halo"></div>
-          <img
-            class="hero-avatar"
-            src="./assets/assets/images/asha-avatar.png"
-            alt="Asha, your friendly companion"
-          />
-          <div class="floating-label label-one">✦ Your pace. Your way.</div>
-          <div class="floating-label label-two">
-            <i class="status-dot"></i> Here with you
+        </section>
+
+        <section class="value-strip" aria-label="ASHA principles">
+          <article><span class="landing-icon" aria-hidden="true">⌘</span><div><h2>Multiple Ways to Communicate</h2><p>Touch, facial gestures, hand gestures, and assisted speech.</p></div></article>
+          <article><span class="landing-icon" aria-hidden="true">✓</span><div><h2>Patient-Controlled Requests</h2><p>Meaningful requests require patient confirmation.</p></div></article>
+          <article><span class="landing-icon" aria-hidden="true">↗</span><div><h2>Caregiver Connection</h2><p>Stay informed through delivery and acknowledgement states.</p></div></article>
+        </section>
+
+        <section id="how-it-works" class="landing-section process-section" aria-labelledby="how-title">
+          <div class="section-heading centered-heading"><span class="eyebrow">HOW IT WORKS</span><h2 id="how-title">From a simple signal to meaningful communication.</h2><p>ASHA helps turn supported inputs into confirmed requests that caregivers can understand and respond to.</p></div>
+          <ol class="process-flow">
+            <li><span>01</span><h3>Choose Your Way</h3><p>Use touch, calibrated gestures, or assisted speech.</p></li>
+            <li><span>02</span><h3>Express a Need</h3><p>ASHA interprets the selected input into a proposed message.</p></li>
+            <li><span>03</span><h3>Confirm the Message</h3><p>Review and explicitly confirm a consequential request.</p></li>
+            <li><span>04</span><h3>Stay Connected</h3><p>A caregiver receives the request and can acknowledge it.</p></li>
+          </ol>
+        </section>
+
+        <section id="features" class="landing-section features-section" aria-labelledby="features-title">
+          <div class="section-heading"><span class="eyebrow">CAPABILITIES</span><h2 id="features-title">One platform. Multiple ways to communicate.</h2><p>Flexible support that adapts to the person, not the other way around.</p></div>
+          <div class="feature-grid">
+            <article class="feature-card feature-primary"><span class="feature-number">01</span><div><span class="landing-icon" aria-hidden="true">☝</span><h3>Touch Communication</h3><p>Large, accessible buttons for common needs and clear next steps.</p><div class="touch-preview"><span>Water</span><span>Comfort</span><span>Please come here</span></div></div></article>
+            <article class="feature-card"><span class="landing-icon" aria-hidden="true">◌</span><h3>FaceSpeak</h3><p>Calibrated expressions, head movements, and deliberate blink patterns.</p></article>
+            <article class="feature-card"><span class="landing-icon" aria-hidden="true">⌁</span><h3>FingerSpeak</h3><p>Personalized hand gestures mapped to meaningful phrases.</p></article>
+            <article class="feature-card"><span class="landing-icon" aria-hidden="true">⌁</span><h3>SenseAssist</h3><p>Capture speech, review editable text, and choose optional AI clarification.</p></article>
+            <article class="feature-card"><span class="landing-icon" aria-hidden="true">~</span><h3>VitalSense</h3><p>Experimental browser-local pulse-trend observations with signal-quality checks.</p></article>
+            <article class="feature-card"><span class="landing-icon" aria-hidden="true">✦</span><h3>ASHA AI Assistance</h3><p>Consent-based text and speech clarification, with cloud assistance kept optional.</p></article>
           </div>
-        </div>
-        <div class="welcome-bottom">
-          <span>FACE + HANDS</span><span>SPEECH SUPPORT</span
-          ><span>BODY + VITAL TRENDS</span><span>CONNECTED CAREGIVER</span>
-        </div>
+        </section>
+
+        <section id="who-its-for" class="landing-section audience-section" aria-labelledby="audience-title">
+          <div class="section-heading centered-heading"><span class="eyebrow">FOR PEOPLE AND THEIR CARE CIRCLES</span><h2 id="audience-title">Designed for the people at the heart of care.</h2></div>
+          <div class="audience-grid">
+            <article class="audience-card patient-audience"><span class="audience-kicker">FOR PATIENTS</span><h3>Communicate in a way that feels right.</h3><p>Choose from multiple interaction methods, personalize calibration, and review a request before it is sent.</p><ul><li>Accessible interaction choices</li><li>Personalized calibration</li><li>Clear control and confirmation</li></ul><button class="secondary" data-landing-action="demo">Try Patient Demo <span aria-hidden="true">→</span></button></article>
+            <article class="audience-card caregiver-audience"><span class="audience-kicker">FOR CAREGIVERS</span><h3>Stay close, without crowding out independence.</h3><p>Use private care-circle links to view incoming requests, acknowledgement states, and optional notifications.</p><ul><li>Private care-circle access</li><li>Incoming request visibility</li><li>Simple request management</li></ul><button class="primary" data-landing-action="setup">Set Up a Care Circle <span aria-hidden="true">→</span></button></article>
+          </div>
+        </section>
+
+        <section id="about" class="landing-section trust-section" aria-labelledby="trust-title">
+          <div class="section-heading"><span class="eyebrow">PRIVACY, SAFETY, AND TRUST</span><h2 id="trust-title">Designed with privacy and control in mind.</h2></div>
+          <div class="trust-grid">
+            <article><span class="landing-icon" aria-hidden="true">◉</span><h3>Camera Processing Stays Local</h3><p>Browser-based camera inference is processed locally.</p></article>
+            <article><span class="landing-icon" aria-hidden="true">✓</span><h3>You Stay in Control</h3><p>Meaningful caregiver requests require explicit patient confirmation.</p></article>
+            <article><span class="landing-icon" aria-hidden="true">☁</span><h3>Optional Cloud AI</h3><p>Cloud AI assistance requires consent and can remain disabled.</p></article>
+          </div>
+          <p class="trust-note">ASHA is an assistive communication demonstration and is not a validated medical device or emergency-response system.</p>
+        </section>
+
+        <section class="landing-section getting-started" aria-labelledby="start-title">
+          <div class="section-heading centered-heading"><span class="eyebrow">GET STARTED</span><h2 id="start-title">Getting started is simple.</h2></div>
+          <div class="start-steps"><article><span>1</span><h3>Open ASHA</h3><p>Explore the live demo or create a care circle.</p></article><article><span>2</span><h3>Choose an input method</h3><p>Use a suitable supported communication mode.</p></article><article><span>3</span><h3>Communicate with confidence</h3><p>Review and confirm requests for your caregiver.</p></article></div>
+          <div class="centered-actions"><button class="primary" data-landing-action="demo">Get Started with ASHA <span aria-hidden="true">→</span></button></div>
+        </section>
+
+        <section class="closing-cta" aria-labelledby="closing-title"><div><span class="eyebrow">ASHA BY NEUROBRIDGE</span><h2 id="closing-title">Communication should have no barriers.</h2><p>Explore how ASHA helps people communicate in their own way.</p></div><div class="actions"><button class="primary" data-landing-action="demo">Explore Live Demo <span aria-hidden="true">→</span></button><button class="secondary" data-landing-action="setup">Set Up With a Caregiver</button></div></section>
+
+        <footer class="landing-footer">
+          <div class="footer-grid"><div><a class="brand footer-brand" href="#home" data-landing-section="home"><span class="brandmark" aria-hidden="true">a</span><span>asha<small>NEUROBRIDGE</small></span></a><p>AI-powered communication, safety and care for people who cannot speak.</p><p class="small">Helping people communicate on their own terms, with caregivers kept meaningfully connected.</p></div><div><h2>Explore</h2><a href="#home" data-landing-section="home">Home</a><a href="#features" data-landing-section="features">Features</a><a href="#how-it-works" data-landing-section="how-it-works">How It Works</a><a href="#who-its-for" data-landing-section="who-its-for">Who It’s For</a></div><div><h2>Get Started</h2><button data-landing-action="demo">Live Demo</button><button data-landing-action="setup">Create a Care Circle</button><button data-landing-action="patient">Patient Link</button><button data-landing-action="caregiver">Caregiver Access</button></div><div><h2>Information</h2><a href="#about" data-landing-section="about">About ASHA</a><a href="#about" data-landing-section="about">Privacy &amp; Trust</a><a href="#about" data-landing-section="about">Accessibility</a></div></div>
+          <div class="footer-bottom"><span>© <span id="landingYear"></span> ASHA / NeuroBridge</span><span>Assistive communication demonstration — not an emergency-response system.</span><a href="#home" data-landing-section="home">Back to top ↑</a></div>
+        </footer>
       </section>
       <section id="setup" class="view narrow" hidden>
         <button class="text-button" data-view="welcome">← Back</button>
