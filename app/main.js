@@ -204,7 +204,14 @@ function toast(t) {
 }
 function theme() {
   document.documentElement.dataset.theme = settings.theme;
-  $("themeButton").textContent = settings.theme === "dark" ? "☀" : "☾";
+  const dark = settings.theme === "dark";
+  $("themeButton").textContent = dark ? "☀" : "☾";
+  $("themeButton").setAttribute("aria-pressed", String(dark));
+  $("themeButton").setAttribute(
+    "aria-label",
+    dark ? "Switch to light theme" : "Switch to dark theme",
+  );
+  $("themeButton").title = dark ? "Switch to light theme" : "Switch to dark theme";
   save("settings", settings);
   $("fingerStudio")?.contentWindow?.ashaSetTheme?.(settings.theme);
 }
@@ -245,7 +252,7 @@ function show(id) {
   if (previousView !== id) {
     guide.clear();
     cancelRequest();
-    $("chatPanel").hidden = true;
+    closeChat();
   }
   if (profile && settings.proactive && previousView !== id && ["patient", "details", "settings"].includes(id)) {
     const description = id === "patient"
@@ -1631,11 +1638,24 @@ function presentAshaActions(result, message, context) {
   if (container.childElementCount) (details || message).after(container);
   return opened;
 }
-function openChat() {
+let chatOpener = null;
+function openChat(opener = document.activeElement) {
+  chatOpener = opener instanceof HTMLElement ? opener : null;
   $("chatPanel").hidden = false;
   $("chatInput").focus();
 }
-$("closeChat").onclick = () => ($("chatPanel").hidden = true);
+function closeChat() {
+  $("chatPanel").hidden = true;
+  chatOpener?.focus?.();
+  chatOpener = null;
+}
+$("closeChat").onclick = closeChat;
+$("chatPanel").addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeChat();
+  }
+});
 function immediateAppGuide(text) {
   const greeting = instantGreeting(text, {
     language: settings.language,
@@ -1807,7 +1827,7 @@ handle.onpointermove = (e) => {
 };
 handle.onpointerup = () => {
   if (drag && !drag.moved)
-    $("chatPanel").hidden ? openChat() : ($("chatPanel").hidden = true);
+    $("chatPanel").hidden ? openChat(handle) : closeChat();
   drag = null;
 };
 handle.onkeydown = (e) => {

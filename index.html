@@ -33,7 +33,7 @@
       </nav>
       <div class="top-actions">
         <span id="cloudBadge" class="pill landing-status">Your companion</span>
-        <button id="themeButton" class="icon-button" aria-label="Switch color theme">☾</button>
+        <button id="themeButton" class="icon-button" aria-label="Switch to dark theme" aria-pressed="false">☾</button>
         <button class="primary landing-try" data-landing-action="demo">Try ASHA <span aria-hidden="true">→</span></button>
         <button id="landingMenuToggle" class="icon-button landing-menu-toggle" aria-label="Open Settings" title="Open Settings">☰</button>
       </div>
@@ -570,12 +570,15 @@
       id="chatPanel"
       class="chat-panel card"
       aria-label="Asha companion"
+      aria-labelledby="chatTitle"
+      aria-modal="false"
+      role="dialog"
       hidden
     >
       <div class="section-heading">
         <div>
           <span class="eyebrow">ASHA</span>
-          <h2>Your companion</h2>
+          <h2 id="chatTitle">Your companion</h2>
         </div>
         <button id="closeChat" class="icon-button" aria-label="Close chat">
           ×
@@ -597,7 +600,7 @@
         /><button class="primary" aria-label="Send message">↑</button>
       </form>
     </section>
-    <dialog id="confirmDialog">
+    <dialog id="confirmDialog" aria-labelledby="confirmText" aria-describedby="confirmHint confirmStatus">
       <span class="eyebrow">LET’S MAKE SURE</span>
       <h2 id="confirmText"></h2>
       <p id="confirmHint">Send this request to your caregiver?</p>
@@ -608,7 +611,7 @@
         ><button id="confirmNo" class="secondary">Not now</button>
       </div>
     </dialog>
-    <dialog id="calibrationDialog">
+    <dialog id="calibrationDialog" aria-labelledby="calibrationTitle" aria-describedby="calibrationInstruction calibrationStatus">
       <span class="eyebrow">LIVE, PERSONAL CALIBRATION</span>
       <h2 id="calibrationTitle">Get comfortable.</h2>
       <p id="calibrationInstruction"></p>
@@ -620,8 +623,8 @@
         ><button id="endCalibration" class="text-button">Cancel</button>
       </div>
     </dialog>
-    <dialog id="linkDialog">
-      <h2>Open your private link</h2>
+    <dialog id="linkDialog" aria-labelledby="linkDialogTitle" aria-describedby="linkError">
+      <h2 id="linkDialogTitle">Open your private link</h2>
       <p>Paste the complete link shared during caregiver setup.</p>
       <label class="field"
         >Private access link<input id="linkInput" type="url" autocomplete="off"

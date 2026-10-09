@@ -22,6 +22,8 @@ function setTab(tab) {
   $('understandTab').classList.toggle('active', !practice);
   $('practiceTab').setAttribute('aria-selected', String(practice));
   $('understandTab').setAttribute('aria-selected', String(!practice));
+  $('practiceTab').tabIndex = practice ? 0 : -1;
+  $('understandTab').tabIndex = practice ? -1 : 0;
   if (listening) listening.stop();
 }
 
@@ -117,6 +119,21 @@ async function interpret() {
 
 $('practiceTab').addEventListener('click', () => setTab('practice'));
 $('understandTab').addEventListener('click', () => setTab('understand'));
+document.querySelector('[role="tablist"]').addEventListener('keydown', (event) => {
+  const tabs = [$('practiceTab'), $('understandTab')];
+  const current = tabs.indexOf(document.activeElement);
+  if (current < 0) return;
+  let next = current;
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (current + 1) % tabs.length;
+  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (current + tabs.length - 1) % tabs.length;
+  else if (event.key === 'Home') next = 0;
+  else if (event.key === 'End') next = tabs.length - 1;
+  else return;
+  event.preventDefault();
+  setTab(next === 0 ? 'practice' : 'understand');
+  tabs[next].focus();
+});
+setTab('practice');
 $('hearPhrase').addEventListener('click', () => speak($('targetPhrase').value.trim()));
 $('practiceMic').addEventListener('click', () => capture('practice'));
 $('understandMic').addEventListener('click', () => capture('understand'));

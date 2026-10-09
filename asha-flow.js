@@ -4,7 +4,10 @@ export const apiBase = 'https://neurobridge-asha-maira-relay.vercel.app/api/v1/d
 export function applyTheme() {
   document.documentElement.dataset.theme = localStorage.getItem('asha_theme') === 'light' ? 'light' : 'dark';
   document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
-    button.textContent = document.documentElement.dataset.theme === 'light' ? '☾ Dark' : '☀ Light';
+    const light = document.documentElement.dataset.theme === 'light';
+    button.textContent = light ? '☾ Dark' : '☀ Light';
+    button.setAttribute('aria-pressed', String(light));
+    button.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
   });
 }
 export function wireTheme() {

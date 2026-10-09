@@ -1,12 +1,17 @@
 import { createRequire } from "node:module";
 import fs from "node:fs/promises";
 const require = createRequire(import.meta.url);
-const {
-  chromium,
-} = require("C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright");
+let chromium;
+try {
+  ({ chromium } = require("playwright"));
+} catch {
+  throw Error(
+    "Browser tests require the optional Playwright package and a browser binary. " +
+      "Install them in the test environment, then start `npm run start` before running this script.",
+  );
+}
 await fs.mkdir("artifacts", { recursive: true });
 const browser = await chromium.launch({
-  executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
   headless: true,
   args: [
     "--use-fake-ui-for-media-stream",
