@@ -284,45 +284,15 @@ const landingActions = {
   caregiver: () => show("caregiver"),
 };
 document.querySelectorAll("[data-landing-action]").forEach((button) => {
-  button.addEventListener("click", () => {
-    if (button.closest("#landingMobileMenu")) closeLandingMenu();
-    landingActions[button.dataset.landingAction]?.();
-  });
+  button.addEventListener("click", () => landingActions[button.dataset.landingAction]?.());
 });
 const menuToggle = $("landingMenuToggle");
-const mobileMenu = $("landingMobileMenu");
-function closeLandingMenu({ restoreFocus = false } = {}) {
-  if (!mobileMenu || mobileMenu.hidden) return;
-  mobileMenu.hidden = true;
-  menuToggle?.setAttribute("aria-expanded", "false");
-  if (restoreFocus) menuToggle?.focus();
-}
-menuToggle?.addEventListener("click", () => {
-  const willOpen = mobileMenu.hidden;
-  mobileMenu.hidden = !willOpen;
-  menuToggle.setAttribute("aria-expanded", String(willOpen));
-  if (willOpen) mobileMenu.querySelector("a, button")?.focus();
-});
-$("landingMenuSettings")?.addEventListener("click", () => {
-  closeLandingMenu();
-  show("settings");
-});
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeLandingMenu({ restoreFocus: true });
-});
-document.addEventListener("pointerdown", (event) => {
-  if (
-    !mobileMenu?.hidden &&
-    !mobileMenu.contains(event.target) &&
-    !menuToggle?.contains(event.target)
-  ) closeLandingMenu();
-});
+menuToggle?.addEventListener("click", () => show("settings"));
 document.querySelectorAll("[data-landing-section]").forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
     const section = $(link.dataset.landingSection);
     show("welcome");
-    closeLandingMenu();
     requestAnimationFrame(() => section?.scrollIntoView({ behavior: "smooth", block: "start" }));
   });
 });
