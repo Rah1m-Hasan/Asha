@@ -1590,6 +1590,83 @@ a > .asha-icon {
   color: currentColor;
 }
 .bottom-nav span { font-size: inherit; }
+
+/* Responsive containment guardrails. These deliberately avoid canvases so their
+   drawing buffers and camera coordinate systems remain controlled by the modules. */
+img,
+iframe,
+audio,
+video {
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+.view,
+.card,
+.module-panel,
+#moduleContent,
+.chat-panel,
+.event,
+.detail-summary > div,
+.field,
+.actions,
+.tabs {
+  min-width: 0;
+}
+.card,
+.event,
+.chat-messages,
+.speech-result,
+.link-box {
+  overflow-wrap: anywhere;
+}
+.chat-panel {
+  max-height: calc(100dvh - var(--bottom-nav-clearance) - 96px);
+  overflow: auto;
+}
+.chat-panel form,
+.chat-panel form input {
+  min-width: 0;
+}
+
+@media (max-width: 390px) {
+  body.app-active .view {
+    --page-gutter: 16px;
+  }
+  body.app-active .bottom-nav {
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
+    width: auto;
+    transform: none;
+  }
+  body.app-active .bottom-nav button {
+    white-space: normal;
+    line-height: 1.15;
+  }
+  body.app-active .chat-panel {
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
+    width: auto;
+    padding: 16px;
+  }
+  body.app-active .chat-panel form {
+    align-items: stretch;
+  }
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+  body.app-active .chat-panel {
+    bottom: calc(var(--bottom-nav-clearance) + 16px);
+    max-height: calc(100dvh - var(--bottom-nav-clearance) - 28px);
+  }
+  body.app-active .chat-messages {
+    max-height: 24dvh;
+  }
+  body.app-active dialog {
+    max-height: calc(100dvh - 20px);
+  }
+}
 .bottom-nav .asha-icon {
   width: var(--icon-md);
   height: var(--icon-md);

@@ -49,3 +49,25 @@ test("application content reserves space for fixed navigation and uses the share
   assert.match(css, /padding: var\(--space-6\) var\(--page-gutter\) var\(--bottom-nav-clearance\)/);
   assert.match(css, /font:\s*16px Inter,/);
 });
+
+test("responsive guardrails keep dense modules and auxiliary panels in the viewport", async () => {
+  const [appCss, flowCss, neuroCss, vitalSense, fingerSpeak, overlay, nav] =
+    await Promise.all([
+      read("app/style.css"),
+      read("asha-flow.css"),
+      read("neuroface/style.css"),
+      read("vitalsense/index.html"),
+      read("neuroface/fingerspeak.html"),
+      read("asha-overlay.js"),
+      read("asha-nav.js"),
+    ]);
+
+  assert.match(appCss, /max-height: calc\(100dvh - var\(--bottom-nav-clearance\) - 96px\)/);
+  assert.match(appCss, /@media \(max-height: 560px\) and \(orientation: landscape\)/);
+  assert.match(flowCss, /\.topbar nav\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(neuroCss, /@media\(max-width:480px\)/);
+  assert.match(vitalSense, /@media \(max-width:600px\)/);
+  assert.match(fingerSpeak, /class="page-disclaimer"/);
+  assert.match(overlay, /max-height:calc\(100dvh - 104px\)/);
+  assert.match(nav, /@media\(max-width:360px\)\{#asha-pages-menu\{grid-template-columns:1fr/);
+});

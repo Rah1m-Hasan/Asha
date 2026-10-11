@@ -175,3 +175,7 @@ html[data-theme=light] .cam-wrap,html[data-theme=light] #video,html[data-theme=l
 
 @media(max-width:1080px){.grid{grid-template-columns:1fr 1fr}.span2{grid-column:span 2}}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.span2{grid-column:span 1}.topbar{position:relative;top:0;flex-direction:column;align-items:stretch}.disclaimer{flex-direction:column;align-items:flex-start}.comm-grid{grid-template-columns:1fr}}
+
+/* Small-screen data-dense controls: preserve every field while allowing the
+   layout to wrap instead of forcing the document wider than the viewport. */
+img,video{max-width:100%}.grid,.card,.card-head,.controls,.kv-row,.comm-grid,.fields,.fg-row,.modal-box{min-width:0}.card,.maira-answer,.log-item,.guide-prompt{overflow-wrap:anywhere}.cam-hud{max-width:calc(100% - 20px);flex-wrap:wrap}.modal-box{max-height:calc(100dvh - 32px)}@media(max-width:480px){.topbar{margin:0;padding:14px 12px;border-radius:0}.top-actions,.top-actions .btn{width:100%}.top-actions .btn{min-height:44px}.top-actions .pill{justify-content:center}.grid{padding:0 8px;gap:10px}.card{padding:14px}.fields,.au-grid,.fg-row,.fg-row.eval{grid-template-columns:1fr}.fg-samples,.badge-protected{white-space:normal;padding-bottom:0}.cmd-display{font-size:clamp(1.5rem,10vw,2.1rem);letter-spacing:.08em}.cam-hud{left:8px;bottom:8px}.cam-hud div{font-size:10px;padding:5px 7px}}@media(max-height:560px) and (orientation:landscape){.topbar{position:relative;top:0;margin:0;border-radius:0}.grid{padding-bottom:12px}.modal{padding:10px}.modal-box{max-height:calc(100dvh - 20px)}}

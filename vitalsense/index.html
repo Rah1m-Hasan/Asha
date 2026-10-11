@@ -208,6 +208,42 @@
     border-top:1px solid var(--line); }
   .footer-note code{font-family:var(--mono); background:var(--surface-2); padding:1px 5px; border-radius:4px;}
 
+  /* Keep the monitor usable on narrow phones and short landscape viewports.
+     Canvas dimensions remain owned by the existing drawing code. */
+  .topbar,.dashboard,.hero-grid,.tile-stack,.small-tiles-row,.asha-strip,.insights-row,.insight-card,.method-details{min-width:0;}
+  .disclaimer,.overlay-msg,.asha-alert,.asha-ask,.log-entry{overflow-wrap:anywhere;}
+  @media (max-width:600px){
+    .topbar{padding:14px 16px;gap:12px;align-items:flex-start;flex-wrap:wrap;}
+    .topbar>div:last-child{width:100%;justify-content:space-between;flex-wrap:wrap;}
+    .brand-text .subtitle{max-width:250px;}
+    .disclaimer{margin-bottom:14px;padding:8px 16px;}
+    .dashboard{padding:0 16px calc(28px + env(safe-area-inset-bottom));}
+    .hero-grid{gap:14px;}
+    .video-wrap{border-radius:14px;}
+    .overlay-msg{padding:20px 16px;}
+    .quality-chip{top:9px;left:9px;max-width:calc(100% - 18px);}
+    .monitor-tile,.insight-card{padding:14px;}
+    .small-tiles-row{gap:10px;}
+    .hr-tile .tile-value{font-size:clamp(2rem,12vw,2.75rem);}
+    .asha-strip{padding:12px;gap:8px 12px;}
+    .asha-right{margin-left:0;flex-basis:100%;}
+    .asha-right .btn{width:100%;min-height:44px;}
+    .wave-strip-head{gap:8px;flex-wrap:wrap;}
+    .method-details summary,.method-body{padding-left:14px;padding-right:14px;}
+  }
+  @media (max-width:360px){
+    .small-tiles-row{flex-direction:column;}
+    .status-pill{max-width:100%;overflow-wrap:anywhere;}
+    .hrv-grid{grid-template-columns:1fr;}
+  }
+  @media (max-height:560px) and (orientation:landscape){
+    .topbar{padding-top:8px;padding-bottom:8px;}
+    .dashboard{padding-bottom:16px;}
+    .tile-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+    .small-tiles-row{grid-column:1/-1;}
+    .video-wrap{max-height:calc(100dvh - 120px);}
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
   }
