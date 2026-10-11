@@ -1,68 +1,59 @@
-# NeuroBridge Asha · Unified app
+# ASHA · Assistive communication workspace
 
-A new application built from the preserved `neurobridge-asha-unified-web` assets. Original repositories are not modified.
+ASHA is a browser-based assistive communication demonstration. It brings together a caregiver-supported setup flow, patient communication controls, local camera-based interaction experiments, speech assistance, and optional cloud guidance.
 
-## Live application
+> **Safety notice:** ASHA is a research/demo application, not a medical device, emergency service, or validated monitoring system. Do not use camera, gesture, pulse, posture, or speech observations as a diagnosis or as the only way to request urgent help.
 
-- Patient / caregiver setup: https://neurobridge-asha-live.vercel.app/
-- Direct FaceSpeak demo: https://neurobridge-asha-live.vercel.app/?module=facespeak
-- Caregiver dashboard: https://neurobridge-asha-live.vercel.app/?role=caregiver
-- New source repository: https://github.com/mysunatislam/neurobridge-asha-unified-app
+## Production deployment
 
-## Explore without a patient link
+The current production application is deployed at:
 
-Choose **Explore live demo** on the first page or open a direct `?module=` link. FaceSpeak, FingerSpeak, VitalSense, SenseAssist and posture are all available in Details. Tap **Start camera** to run the actual models; guided calibration can be tried there. A generic demo care circle is created automatically when the service is available, so Asha chat and confirmed caregiver requests can also be tested without pasting credentials. Cloud chat asks for consent before sending words. To test delivery on another phone, use **Copy demo caregiver link**. If the service is down, local sensing still opens and the page identifies the missing cloud connection.
+- **https://asha-unified-app.vercel.app/**
 
-## Two-phone walkthrough
+Supported production entry points:
 
-1. Open the main link and choose **Set up with a caregiver**. On **Tell Asha about you**, optionally choose support needs or skip. Next select actual capabilities, including vision, hearing and speech. Speech support is suggested alongside other viable modes, not instead of them.
-2. Select **Next**, review the recommendation, and create a private care circle.
-3. If the setup was completed on the patient phone, stay there; no patient link is needed. Copy the **caregiver link** to the other phone. If setup was completed elsewhere, use the patient link on the patient phone. An ID alone cannot authorize access.
-4. On the patient phone choose **Start support**. Open **Details → FaceSpeak · NeuroFace Sense** for the full facial dashboard. Relax with eyes open briefly to learn the observation reference, then choose **Calibrate patient** for measured gesture calibration; unsupported movements can be skipped. FingerSpeak opens its complete two-hand calibration, speaking and evaluation studio on the same camera.
-5. Tap Water, confirm, then acknowledge on the caregiver phone. The patient sees Sent → Received → Acknowledged. The same request flow is used for trained gestures and confirmed speech.
-6. The caregiver can enable push notifications. On iOS, install the page to the Home Screen first. Foreground dashboard polling works without push. Allow sound on the patient device with an initial touch.
+- Patient entry: `https://asha-unified-app.vercel.app/patient`
+- Caregiver entry: `https://asha-unified-app.vercel.app/caregiver`
+- FaceSpeak: `https://asha-unified-app.vercel.app/?module=facespeak`
+- FingerSpeak: `https://asha-unified-app.vercel.app/?module=fingerspeak`
+- VitalSense: `https://asha-unified-app.vercel.app/?module=vitalsense`
+- SenseAssist: `https://asha-unified-app.vercel.app/?module=senseassist`
+- Posture: `https://asha-unified-app.vercel.app/?module=posture`
+- Health check: `https://asha-unified-app.vercel.app/api/health`
 
-## Implemented
+Use the exact links above. Legacy standalone routes such as `/vitalsense/`, `/neuroface/`, `/modules/`, and `/pair/` are excluded from the Vercel output; some non-trailing legacy paths intentionally redirect to the unified SPA.
 
-- Clean light/dark responsive UI and installable PWA. Large controls, visible labels, keyboard focus, reduced-motion support, live status, movable floating Asha companion.
-- Capability assessment and recommendations without module access restrictions. Manual interface choice is always possible.
-- Optional “Tell Asha about you” setup: accident-related voice loss, ALS, stroke recovery, cerebral palsy, older-adult support, locked-in syndrome, autism, temporary voice loss or another reason. Multiple choices, goals, and skip are supported. This self-described context is editable by the caregiver and is never used to infer or limit capabilities.
-- NeuroFace Sense (including FaceSpeak calibration), FingerSpeak, VitalSense and posture remain enabled together on the shared camera, regardless of the open details tab. Live status distinguishes tracked signals from searching or weak signals. Facial expression values are model signals, never a percentage of the patient's ability.
-- One camera stream shared by face, two independent hands, local forehead color-pulse sampling, and body pose. Face/pose and hand processing use independently backpressured workers where supported, with GPU/CPU and compatible single-worker/foreground fallbacks. FingerSpeak receives priority hand sampling during calibration or live use without opening another camera.
-- FaceSpeak: measured neutral baseline; practiced rapid triple blink and separate longer confirmation blink for eye-only communication; three observed repetitions for selected smile/pucker/nod/head-turn skills; only captured skills enabled. Asha asks before a caregiver request is sent. Normal blink counts never send requests.
-- NeuroFace details restore the original neutral-relative AU geometry for eyebrow raise/lowering, cheek raise, smile, lip stretch and lip opening; bilateral eye/smile measurements; yaw/pitch/roll and nod state; motion curves; and an exportable observation log. The original blink/smile/head state machines and calibrated thresholds are preserved. Signal consistency is not a motor-ability score.
-- The visible blink count follows completed bilateral dips and recoveries in the same raw EAR signal as the curve, using a recent open-eye reference rather than a stale maximum or saved camera baseline. Tracking gaps, isolated spikes, winks and held closures are rejected. These observed blinks never emit FaceSpeak commands; deliberate calibrated request recognition stays separate.
-- FingerSpeak: the original full two-hand interface, real recorded samples, guided calibration, temporal model training, prototype/DTW comparison, held-out evaluation, probability curves, and live intent/release gating. Its model and samples are scoped to the patient and retained when moving between pages. Familiar-pose three-hold mappings remain an optional shortcut. Assessment never blocks this module.
-- Body posture: MediaPipe Pose Landmarker Lite in every patient view. Optional YOLO26n-pose ONNX cross-check in its own worker. Actual body landmarks, not a decorative overlay.
-- Rest-like to awake-like check-in: continuous valid closed-eye/still-body observations for 60 seconds, then open eyes and movement. Occlusion or tracking gaps reset evidence. This does **not** measure sleep stages.
-- Sustained posture or asymmetric lip cues prompt the patient to confirm a caregiver request. The original lateral-lip (3.5% face width) and corner-asymmetry (4%) thresholds use a same-side 60-second observation timer, with pose/symmetric-smile guards and tracking-loss reset. Startup displacement is not learned away as neutral. A flag is not a seizure diagnosis and never places an automatic emergency call.
-- VitalSense: local CHROM-style signal and spectral pulse-trend estimate with motion/lighting/signal rejection. No fabricated blood pressure, SpO2 or temperature values.
-- SenseAssist: a user-started listening window of up to 90 seconds that reconnects after browser silence cutoffs, pauses while Asha speaks, and stops when the page is hidden or the module changes; browser transcription/dictation, editable heard text, server-powered AI interpretation with alternatives and explicit speaker confirmation, spoken output, caregiver sending, and AI practice guidance. Other nearby voices can still be picked up by the microphone; this is not speaker identification or guaranteed echo cancellation.
-- Asha server-side intelligence from every module. Device voice selection and recorded caregiver phrases; confirmed local preferences and optional needs scanning. No voice-cloning claim.
-- Patient-scoped caregiver requests, separate hashed role tokens, idempotent retries, received/acknowledged receipts, current status, multiple assigned patients, and optional web push. Notification bodies contain no patient details.
-- API keys are server environment variables only. Private storage namespace, rate limits, origin checks, consent, no-store responses, and daily expired-session cleanup.
+## What the application does
 
-## Asha model routing and retrieval
+- Guides a patient/caregiver setup and creates separate private patient and caregiver access links.
+- Keeps caregiver requests behind an explicit patient confirmation step; requests can be received and acknowledged by a caregiver.
+- Supports touch controls, calibrated FaceSpeak gestures, FingerSpeak gesture training, browser speech recognition, and typed communication assistance.
+- Runs face, hand, pose, and camera pulse-trend experiments locally in the browser when permission is granted.
+- Uses one shared camera stream for supported sensing modules, with worker and compatible fallback paths.
+- Offers optional, consent-gated cloud assistance through the server API. AI responses can suggest wording or a non-executing action, but cannot bypass the confirmation flow.
+- Includes dark/light themes, PWA assets, keyboard focus styles, reduced-motion support, and responsive layouts.
 
-Asha routes English conversation to the configured Gemini Flash profile, unclear speech to the configured GPT profile, and Bangla or Bangla-English conversation to the configured Claude Opus profile. Settings offers automatic, English, Bangla and mixed conversation; SenseAssist has a separate microphone listening language. This routing is a product choice, not a claim that any model is clinically best for a language or speech impairment.
+## Architecture
 
-The server retrieves short, relevant excerpts from the `okf/` knowledge bundle and that patient's explicitly confirmed speech corrections stored on the device. The bundle has eight Markdown concepts with OKF v0.2-style frontmatter, provenance and draft status. `okf/compile.mjs` checks each concept against the versioned application guide and generates `okf/generated.js`; Vercel imports that static corpus at runtime. The recorded machine verification means source-text parity only, not human or clinical review. These excerpts are sent as reference data in the prompt. The coordinator asks Maira for a structured answer, checks its format and cited source IDs, and verifies proposed actions against the patient's explicit request. These checks do not establish the factual or clinical correctness of generated text.
+```text
+Browser SPA (index.html + app/)
+  ├─ Request and navigation UI          app/main.js
+  ├─ Shared camera / sensing pipeline   app/perception.js + workers
+  ├─ Speech capture                     app/speech-capture.js
+  └─ API requests                       /api/session and /api/asha
 
-The only AI-proposed actions are an optional module suggestion and a caregiver-request proposal. A request still needs the separate patient confirmation before any event is sent. Negated, hypothetical and ambiguous needs do not propose requests. Response Details displays the selected model, retrieved excerpts and checks. The orchestration is implemented by this app around Maira's text API; it does not claim undocumented native tool-calling support.
+Vercel serverless API (api/ + server/)
+  ├─ Private patient/caregiver sessions
+  ├─ Vercel Blob or Supabase persistence
+  ├─ Confirmed caregiver events
+  └─ Consent-gated AI orchestration and retrieval
+```
 
-Keys and profile IDs remain server-side. Optional profile overrides are `MAIRA_CHAT_PROFILE_ID`, `MAIRA_SPEECH_PROFILE_ID` and `MAIRA_BILINGUAL_PROFILE_ID`. Legacy `MAIRA_GPT_PROFILE_ID` applies only to chat. A missing selected model returns an explicit error. Confirmed speech wording stays scoped to the current patient and is sent only when cloud assistance is enabled.
+The main application is vanilla JavaScript, HTML, and CSS; it does not use a React, TypeScript, or bundler build step. The repository also retains browser-module assets and legacy sources needed by the unified experience.
 
-## Important current limits
+## Local development
 
-This is a functioning demonstration application, **not a validated clinical or emergency monitoring device**. Camera-derived posture, facial asymmetry and pulse are engineering observations. Do not rely on it as the only means of obtaining assistance.
-
-Browser camera monitoring works only while the patient page remains open and active. A locked/backgrounded phone may stop the camera. Web push is best-effort and OS-dependent; it is not an emergency dispatch service.
-
-The supplied provider key successfully supports text reasoning and speech interpretation. Its dedicated `/v1/voice-typing/session` returned **401** in the integration check. Therefore the shipped microphone transcript comes from browser speech recognition (or keyboard dictation), **not a falsely labeled provider audio transcription service**. No clinical dysarthric-speech accuracy or speaker-identification claim is made. Direct provider audio requires the supported audio endpoint/protocol and corresponding entitlement.
-
-Camera-model tests use official MediaPipe fixtures, not patient validation. Mobile performance and real gesture accuracy depend on device, lighting and positioning; calibrate on the actual patient's phone.
-
-## Development
+Requirements: Node.js 22+ and npm.
 
 ```sh
 npm install
@@ -70,27 +61,84 @@ npm test
 npm start
 ```
 
-Local preview: http://127.0.0.1:4180. The development server proxies API requests to the deployed backend; it never embeds secrets. Browser tests are in `tests/`, and use the desktop's bundled Playwright/Chrome paths; adapt these paths for another machine. Test artifacts are ignored by Git and deployment.
+The local preview runs at `http://127.0.0.1:4180`.
 
-`api/` contains Vercel serverless functions; `server/` contains persistence and validation. `app/` is the unified frontend and camera pipeline. The original static export remains in Git history and supporting assets are reused. FingerSpeak is embedded from `neuroface/fingerspeak.html`, receiving hand results and the parent's existing media stream through a same-origin bridge; it cannot request another camera or microphone. Other legacy frontend routes are redirected/excluded on Vercel.
+`npm start` is a static development server. Its API proxy is configured in [`scripts/dev.mjs`](scripts/dev.mjs); production behavior should be validated on the Vercel deployment as well.
 
-Server secrets: `MAIRA_API_KEY`, `MAIRA_PROJECT_KEY`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `CRON_SECRET`. Never set the Supabase secret or other private keys in frontend code or a public repository. `scripts/provision.mjs` is an operator helper for this workstation; it transfers credentials in memory. Operator scripts that need a local Maira credential file (`scripts/secret-scan.mjs` for exact-value scanning and `scripts/provider-check.mjs`) read only the path supplied in `MAIRA_CONFIG_PATH`; no credential path is stored in this repository.
+## Testing
 
-### Supabase cutover
+```sh
+# Unit and contract tests
+npm test
 
-1. In the project's Supabase SQL Editor, run [`supabase/schema.sql`](supabase/schema.sql) once. The table has row-level security enabled, no browser roles can access it, and the server secret alone can read or write it.
-2. In the Vercel project's Settings → Environment Variables, set `SUPABASE_URL` to the project URL (`https://<project-ref>.supabase.co`) and `SUPABASE_SECRET_KEY` to a new `sb_secret_...` key from Supabase Settings → API Keys. Apply both to Production and redeploy. The secret must never be added to GitHub, a chat message, or a frontend environment variable.
-3. Check `/api/health` for `storageProvider: "supabase"`, then create one demo care circle and send a test request from the patient page to a separate caregiver page. A healthy health response only confirms configuration; the request and receipt verify real storage.
+# Optional browser workflow test; requires Playwright and a compatible browser
+npm run test:browser
+```
 
-When both variables are present, all existing API routes use the private Supabase table; otherwise they retain the original Blob store. Existing links held only in the old Blob store will need a new care circle if that store is unavailable.
+The test suite covers request gating, calibration and gesture logic, sensing helpers, storage adapters, AI orchestration validation, service-worker behavior, and responsive layout contracts. Browser workflows additionally require camera/browser support and are environment-dependent.
 
-## Verification
+## Deploying to Vercel
 
-- Automated original-engine regression, neutral-relative AU/head, 60-second lip hold, calibration, role, signal rejection and YOLO decoder tests.
-- Two isolated browser contexts with real cloud storage: create care circle → patient request → caregiver receipt → acknowledgment → patient confirmation.
-- Real cloud interpretation of `wed wabbit wghreen` produced `red rabbit green` with a confirmation question and alternatives.
-- Actual MediaPipe/YOLO initialization and real-image pose inference; separate face/two-hand fixtures.
-- Shared-camera regression detects both hands and accepts a real 900 ms calibration sequence without weakening the original continuity, frame-count, hand-count or distance checks. Capture allows up to three seconds to obtain that valid window; slow/occluded captures are rejected rather than padded with duplicate frames.
-- Responsive screenshots, no horizontal overflow, no application JavaScript exceptions in the browser flow.
+This directory is linked to the Vercel project named `asha-unified-app`.
 
-Model sources, licenses and hashes: `models/README.md`, `models/manifest.json`, and `neuroface/vendor/manifest.json`. YOLO's AGPL license requires attention before proprietary commercial distribution.
+1. Run the test suite and review the working tree.
+2. Commit and push the intended revision to the GitHub repository.
+3. If the Git integration is connected, Vercel deploys the push automatically.
+4. To deploy manually from an authenticated Vercel CLI session:
+
+   ```sh
+   npx vercel --prod
+   ```
+
+5. Verify the deployment URL and `GET /api/health` after the deployment becomes ready.
+
+`vercel.json` defines API duration, redirects, rewrites, security headers, and the expiry-cleanup cron. `.vercelignore` intentionally keeps legacy standalone pages, tests, local tooling, Flutter output, and large unused artifacts out of the production deployment.
+
+## Environment configuration
+
+Production secrets belong in Vercel Environment Variables, never in the client or Git history.
+
+| Variable | Purpose |
+| --- | --- |
+| `MAIRA_API_KEY`, `MAIRA_PROJECT_KEY` | Enables consent-gated cloud assistance. |
+| `SUPABASE_URL`, `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY` | Enables Supabase-backed private storage. |
+| `BLOB_READ_WRITE_TOKEN` | Enables the Vercel Blob storage fallback. |
+| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Enables optional web-push notifications. |
+| `CRON_SECRET` | Protects scheduled cleanup when configured. |
+
+Run [`supabase/schema.sql`](supabase/schema.sql) before enabling Supabase storage. After setting environment variables, redeploy and check `/api/health`; then validate a full patient-to-caregiver request and acknowledgement flow.
+
+## Security and privacy boundaries
+
+- Patient and caregiver links use separate role tokens; server storage retains token hashes rather than raw tokens.
+- Caregiver events are persisted only after explicit confirmation.
+- Camera processing is local to the browser. Browser permissions, lighting, device performance, and background-tab behavior affect availability.
+- Cloud assistance requires consent before reviewed text is sent to the server.
+- API responses use `no-store`; secrets must remain server-side.
+
+## Audit summary — 2026-10-11
+
+The repository and live deployment were reviewed before this README update.
+
+- The unified SPA, API routes, server modules, browser sensing pipeline, service worker, Vercel configuration, responsive styles, and test suite were inspected.
+- Production root, health endpoint, service worker, responsive stylesheet, and embedded FingerSpeak asset returned HTTP 200 at `https://asha-unified-app.vercel.app`.
+- The deployed stylesheet contains the current responsive containment changes for small phones, tablets, and short landscape viewports.
+- The `.vercelignore` rules explain the production 404 responses for excluded legacy standalone files; the supported URLs are listed in the production section above.
+- Existing automated tests pass with `npm test`. A real-device/browser pass remains required for camera, microphone, virtual-keyboard, push-notification, screen-reader, and two-device caregiver workflows.
+
+Known engineering risks and manual-validation items are tracked in [`docs/audit/REMAINING_RISKS.md`](docs/audit/REMAINING_RISKS.md). The system's medical and emergency-use limitations are intentional product constraints, not guarantees that can be removed by a deployment.
+
+## Repository map
+
+| Path | Responsibility |
+| --- | --- |
+| `app/` | Unified frontend, responsive UI, camera pipeline, module interactions. |
+| `api/` | Vercel serverless API handlers. |
+| `server/` | Authentication, storage, retrieval, provider, and orchestration logic. |
+| `neuroface/` | FaceSpeak/FingerSpeak assets, models, and browser modules. |
+| `models/` | Local pose and YOLO model assets and licensing information. |
+| `okf/` | Versioned knowledge bundle used for retrieval context. |
+| `tests/` | Node tests, browser workflow scripts, and responsive layout contracts. |
+| `docs/audit/` | Detailed architecture, audit findings, and remaining risks. |
+
+See [`models/README.md`](models/README.md) and the included model licenses before redistributing the model assets, especially the YOLO asset with AGPL-3.0 terms.
